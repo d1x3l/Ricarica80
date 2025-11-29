@@ -8,7 +8,7 @@
   <link rel="shortcut icon" href="/Ricarica80/icons/icon-192.png" sizes="192x192">
   <link rel="icon" href="/Ricarica80/icons/icon-192.png" sizes="192x192">
   <link rel="apple-touch-icon" href="/Ricarica80/icons/apple-touch-icon.png">
-  <link rel="manifest" href="/Ricarica80/manifest.json?v=3">
+  <link rel="manifest" href="/Ricarica80/manifest.json?v=4">
 
   <meta name="theme-color" content="#00aaff">
   <meta name="mobile-web-app-capable" content="yes">
@@ -21,19 +21,20 @@
 
     :root {
       --primary:#00aaff;
-      --accent:#00ffc3;
       --dark:#0f0f15;
-      --gray:#444;
+      --white:#ffffff;
+      --gray:#222;
       --light-gray:#bbb;
-      --bg-gradient:linear-gradient(135deg,#0f0f15,#1a1a30);
+      --accent:#00aaff;
+      --bg-gradient: linear-gradient(135deg,#0f0f15,#1a1a1f);
     }
 
-    * {box-sizing:border-box; margin:0; padding:0;}
+    * {box-sizing:border-box;margin:0;padding:0;}
 
     body {
       font-family: 'Roboto', sans-serif;
       background: var(--bg-gradient);
-      color: #eee;
+      color: var(--white);
       display:flex;
       justify-content:center;
       align-items:center;
@@ -42,7 +43,7 @@
     }
 
     .container {
-      background: rgba(30,30,50,0.95);
+      background: var(--dark);
       padding:30px 25px;
       border-radius:25px;
       box-shadow:0 12px 30px rgba(0,0,0,0.6);
@@ -65,6 +66,15 @@
       color: var(--light-gray);
       font-size:14px;
       line-height:1.4;
+      margin-bottom:15px;
+    }
+
+    .temp-flag {
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:500;
+      font-size:14px;
       margin-bottom:15px;
     }
 
@@ -126,11 +136,11 @@
       border-radius:14px;
       cursor:pointer;
       background: var(--accent);
-      color:#0f0f15;
+      color: var(--dark);
       transition:0.3s;
     }
 
-    button:hover { background:#00e6b8; }
+    button:hover { background:#0088cc; }
 
     .result {
       background: rgba(0,170,255,0.1);
@@ -169,35 +179,30 @@
 <body>
   <div class="container">
     <h1>Ricarica 80%</h1>
-    <div class="subtitle">
-      Fermarsi all'80% allunga la vita della batteria
+    <div class="subtitle">Fermarsi all'80% allunga la vita della batteria</div>
+
+    <div class="temp-flag">
+      <input type="checkbox" id="usaTemp" onchange="toggleTemp()"/>
+      <label for="usaTemp">Considera temperatura ambiente</label>
     </div>
+    <select id="temperatura" style="display:none;">
+      <option value="40">40°C – Molto caldo</option>
+      <option value="35">35°C – Caldo intenso</option>
+      <option value="30">30°C – Caldo</option>
+      <option value="25" selected>25°C – Ideale</option>
+      <option value="20">20°C – Normale</option>
+      <option value="15">15°C – Fresco</option>
+      <option value="10">10°C – Freddino</option>
+      <option value="5">5°C – Freddo</option>
+      <option value="0">0°C – Invernale</option>
+      <option value="-5">-5°C – Molto freddo</option>
+      <option value="-10">-10°C – Gelo</option>
+      <option value="-15">-15°C – Gelo forte</option>
+    </select>
 
     <div class="tabs">
       <div class="tab active" data-tab="auto">Automatica</div>
       <div class="tab" data-tab="manuale">Manuale</div>
-    </div>
-
-    <div class="temp-section">
-      <label><input type="checkbox" id="usaTemp" onchange="toggleTemp()"/> Considera temperatura ambiente</label>
-      <select id="temperatura" style="display:none;">
-        <option value="40">40°C – Molto caldo</option>
-        <option value="35">35°C – Caldo intenso</option>
-        <option value="30">30°C – Caldo</option>
-        <option value="25" selected>25°C – Ideale</option>
-        <option value="20">20°C – Normale</option>
-        <option value="15">15°C – Fresco</option>
-        <option value="10">10°C – Freddino</option>
-        <option value="5">5°C – Freddo</option>
-        <option value="0">0°C – Invernale</option>
-        <option value="-5">-5°C – Molto freddo</option>
-        <option value="-10">-10°C – Gelo</option>
-        <option value="-15">-15°C – Gelo forte</option>
-      </select>
-      <div class="disclaimer">
-        I valori sono indicativi e basati su test reali medi.<br>
-        Ogni auto si comporta in modo leggermente diverso.
-      </div>
     </div>
 
     <div id="auto" class="content active">
@@ -252,9 +257,9 @@
       const sel = document.getElementById('modelloAuto');
       const input = document.getElementById('capacita');
       if (sel.value === "spring") {
-        input.value = "26.8"; input.readOnly = true; input.style.background = "#444";
+        input.value = "26.8"; input.readOnly = true; input.style.background = "#222";
       } else {
-        input.value = ""; input.readOnly = false; input.style.background = "#333"; input.focus();
+        input.value = ""; input.readOnly = false; input.style.background = "#222"; input.focus();
       }
     }
 
