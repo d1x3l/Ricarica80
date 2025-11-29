@@ -119,12 +119,14 @@
     .time-input input { flex:1; }
 
     .temp-section {
-      display:flex;
-      align-items:center;
-      gap:10px;
-      font-size:14px;
-      font-weight:500;
-    }
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:14px;
+  font-weight:500;
+  justify-content:flex-start;
+}
+
 
     button {
       margin-top:10px;
@@ -185,24 +187,25 @@
       <div class="tab" data-tab="manuale">Manuale</div>
     </div>
 
-    <div class="temp-section">
-      <input type="checkbox" id="usaTemp" onchange="toggleTemp()"/>
-      <label for="usaTemp">Considera temperatura ambiente</label>
-      <select id="temperatura" style="display:none;">
-        <option value="40">40°C – Molto caldo</option>
-        <option value="35">35°C – Caldo intenso</option>
-        <option value="30">30°C – Caldo</option>
-        <option value="25" selected>25°C – Ideale</option>
-        <option value="20">20°C – Normale</option>
-        <option value="15">15°C – Fresco</option>
-        <option value="10">10°C – Freddino</option>
-        <option value="5">5°C – Freddo</option>
-        <option value="0">0°C – Invernale</option>
-        <option value="-5">-5°C – Molto freddo</option>
-        <option value="-10">-10°C – Gelo</option>
-        <option value="-15">-15°C – Gelo forte</option>
-      </select>
-    </div>
+<div class="temp-section" style="justify-content:flex-start; gap:10px;">
+  <input type="checkbox" id="usaTemp" onchange="toggleTemp()"/>
+  <label for="usaTemp">Considera temperatura ambiente</label>
+  <select id="temperatura" style="display:none;">
+    <option value="40">40°C – Molto caldo</option>
+    <option value="35">35°C – Caldo intenso</option>
+    <option value="30">30°C – Caldo</option>
+    <option value="25" selected>25°C – Ideale</option>
+    <option value="20">20°C – Normale</option>
+    <option value="15">15°C – Fresco</option>
+    <option value="10">10°C – Freddino</option>
+    <option value="5">5°C – Freddo</option>
+    <option value="0">0°C – Invernale</option>
+    <option value="-5">-5°C – Molto freddo</option>
+    <option value="-10">-10°C – Gelo</option>
+    <option value="-15">-15°C – Gelo forte</option>
+  </select>
+</div>
+
 
     <div id="auto" class="content active">
       <label>Batteria attuale (%)</label>
