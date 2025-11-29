@@ -8,7 +8,7 @@
   <link rel="shortcut icon" href="/Ricarica80/icons/icon-192.png" sizes="192x192">
   <link rel="icon" href="/Ricarica80/icons/icon-192.png" sizes="192x192">
   <link rel="apple-touch-icon" href="/Ricarica80/icons/apple-touch-icon.png">
-  <link rel="manifest" href="/Ricarica80/manifest.json?v=4">
+  <link rel="manifest" href="/Ricarica80/manifest.json?v=5">
 
   <meta name="theme-color" content="#00aaff">
   <meta name="mobile-web-app-capable" content="yes">
@@ -69,15 +69,6 @@
       margin-bottom:15px;
     }
 
-    .temp-flag {
-      display:flex;
-      align-items:center;
-      gap:10px;
-      font-weight:500;
-      font-size:14px;
-      margin-bottom:15px;
-    }
-
     .tabs {
       display:flex;
       gap:10px;
@@ -127,6 +118,14 @@
     .time-input { display:flex; gap:10px; }
     .time-input input { flex:1; }
 
+    .temp-section {
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-size:14px;
+      font-weight:500;
+    }
+
     button {
       margin-top:10px;
       padding:14px;
@@ -173,7 +172,7 @@
       margin-top:10px;
     }
 
-    #temperatura { margin-top:5px; }
+    #temperatura { margin-left:20px; }
   </style>
 </head>
 <body>
@@ -181,28 +180,28 @@
     <h1>Ricarica 80%</h1>
     <div class="subtitle">Fermarsi all'80% allunga la vita della batteria</div>
 
-    <div class="temp-flag">
-      <input type="checkbox" id="usaTemp" onchange="toggleTemp()"/>
-      <label for="usaTemp">Considera temperatura ambiente</label>
-    </div>
-    <select id="temperatura" style="display:none;">
-      <option value="40">40°C – Molto caldo</option>
-      <option value="35">35°C – Caldo intenso</option>
-      <option value="30">30°C – Caldo</option>
-      <option value="25" selected>25°C – Ideale</option>
-      <option value="20">20°C – Normale</option>
-      <option value="15">15°C – Fresco</option>
-      <option value="10">10°C – Freddino</option>
-      <option value="5">5°C – Freddo</option>
-      <option value="0">0°C – Invernale</option>
-      <option value="-5">-5°C – Molto freddo</option>
-      <option value="-10">-10°C – Gelo</option>
-      <option value="-15">-15°C – Gelo forte</option>
-    </select>
-
     <div class="tabs">
       <div class="tab active" data-tab="auto">Automatica</div>
       <div class="tab" data-tab="manuale">Manuale</div>
+    </div>
+
+    <div class="temp-section">
+      <input type="checkbox" id="usaTemp" onchange="toggleTemp()"/>
+      <label for="usaTemp">Considera temperatura ambiente</label>
+      <select id="temperatura" style="display:none;">
+        <option value="40">40°C – Molto caldo</option>
+        <option value="35">35°C – Caldo intenso</option>
+        <option value="30">30°C – Caldo</option>
+        <option value="25" selected>25°C – Ideale</option>
+        <option value="20">20°C – Normale</option>
+        <option value="15">15°C – Fresco</option>
+        <option value="10">10°C – Freddino</option>
+        <option value="5">5°C – Freddo</option>
+        <option value="0">0°C – Invernale</option>
+        <option value="-5">-5°C – Molto freddo</option>
+        <option value="-10">-10°C – Gelo</option>
+        <option value="-15">-15°C – Gelo forte</option>
+      </select>
     </div>
 
     <div id="auto" class="content active">
