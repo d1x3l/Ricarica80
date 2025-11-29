@@ -118,33 +118,10 @@
     .time-input { display:flex; gap:10px; }
     .time-input input { flex:1; }
 
-.temp-section {
-  background:rgba(0,170,255,0.1);
-  padding:15px;
-  border-radius:10px;
-  margin:15px 0
-}
-    .temp-section input[type="checkbox"] {
-      width:auto;
-      margin-right:10px;
-      vertical-align:middle
-    }
-
-
-    button {
-      margin-top:10px;
-      padding:14px;
-      font-size:16px;
-      font-weight:600;
-      border:none;
-      border-radius:14px;
-      cursor:pointer;
-      background: var(--accent);
-      color: var(--dark);
-      transition:0.3s;
-    }
-
-    button:hover { background:#0088cc; }
+    .temp-section {background:rgba(0,170,255,0.1);padding:15px;border-radius:10px;margin:15px 0}
+    .temp-section input[type="checkbox"] {width:auto;margin-right:10px;vertical-align:middle}
+    button {margin-top:25px;width:100%;padding:15px;background:var(--primary);color:white;border:none;border-radius:10px;font-size:18px;font-weight:bold;cursor:pointer;transition:.3s}
+    button:hover {background:#0088cc}
 
     .result {
       background: rgba(0,170,255,0.1);
@@ -192,13 +169,8 @@
 
     <div class="temp-section">
       <label><input type="checkbox" id="usaTemp" onchange="toggleTemp()"/> Considera temperatura ambiente</label>
-      <p style="font-size:13.5px;color:#bbb;margin:8px 0 12px;line-height:1.4">
-        Il freddo rallenta le reazioni chimiche della batteria (fino a 2–3× più tempo)<br>
-        Il caldo forte attiva le protezioni del BMS e riduce la potenza accettata
-      </p>
       <div class="disclaimer">
-        I valori sono indicativi e basati su test reali medi.<br>
-        Ogni auto si comporta in modo leggermente diverso.
+        I valori sono indicativi e basati su test reali medi.
       </div>
       <select id="temperatura" style="display:none;margin-top:10px;">
         <option value="40">40°C – Molto caldo</option>
