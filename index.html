@@ -269,5 +269,14 @@
       }, millisecondi);
     }
   </script>
+  
+  <script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/Ricarica80/sw.js')
+    .then(() => console.log('SW registrato'))
+    .catch(e => console.error('SW registration failed', e));
+}
+  </script>
+  
 </body>
 </html>
