@@ -5,12 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Ricarica 80%</title>
 
-  <!-- icone: usa percorsi assoluti rispetto a https://d1x3l.github.io -->
   <link rel="shortcut icon" href="/Ricarica80/icons/icon-192.png" sizes="192x192">
   <link rel="icon" href="/Ricarica80/icons/icon-192.png" sizes="192x192">
   <link rel="apple-touch-icon" href="/Ricarica80/icons/apple-touch-icon.png">
-
-  <!-- manifest: usa percorso assoluto e versione per forzare refresh cache -->
   <link rel="manifest" href="/Ricarica80/manifest.json?v=2">
 
   <meta name="theme-color" content="#00aaff">
@@ -53,9 +50,7 @@
 <body>
   <div class="container">
     <h1>Ricarica 80%</h1>
-    <div class="sottotitolo">
-      Fermarsi all'80% allunga la vita della batteria
-    </div>
+    <div class="sottotitolo">Fermarsi all'80% allunga la vita della batteria</div>
 
     <div class="tabs">
       <div class="tab active" data-tab="auto">Automatica</div>
@@ -132,7 +127,10 @@
           <option value="10">10 minuti prima</option>
           <option value="15" selected>15 minuti prima</option>
         </select>
-        <button onclick="impostaNotifica()">Attiva notifica</button>
+        <div style="display:flex; gap:10px; margin-top:10px;">
+          <button onclick="openTimerIntent()">Apri Timer Orologio</button>
+          <button onclick="createCalendarEvent()">Apri Calendario</button>
+        </div>
         <div id="notificaAttiva" class="notifica-attiva" style="display:none;">
           Notifica attiva! Ti avviserò tra <span id="tempoNotifica"></span>
         </div>
@@ -142,9 +140,6 @@
 
   <script>
     let timeoutNotifica = null;
-    if ("Notification" in window && Notification.permission === "default") {
-      Notification.requestPermission();
-    }
 
     document.querySelectorAll('.tab').forEach(tab => {
       tab.onclick = () => {
@@ -247,101 +242,45 @@
       window.tempoRimanenteMinuti = minutiTotali;
     }
 
-    /**
-     * openAndroidTimerIntent(seconds, message, skipUI)
-     * - seconds: durata in secondi (1..86400)
-     * - message: testo del timer
-     * - skipUI: booleano, suggerisce all'app di saltare UI (può essere ignorato)
-     */
-    function openAndroidTimerIntent(seconds, message, skipUI = false) {
-      seconds = Math.max(1, Math.min(86400, Math.floor(Number(seconds) || 0)));
-      message = String(message || 'Ricarica 80%').substring(0, 200);
-      const encodedMessage = encodeURIComponent(message);
+    function openTimerIntent() {
+      const minutiPrima = parseInt(document.getElementById('avvisoPrima').value);
+      const totaleMinuti = Math.round(window.tempoRimanenteMinuti - minutiPrima);
+      if (totaleMinuti <= 0) return alert("Il tempo è già passato!");
 
-      const intentUri =
-        'intent:#Intent;' +
-        'action=android.intent.action.SET_TIMER;' +
-        `i.android.intent.extra.alarm.LENGTH=${seconds};` +
-        `S.android.intent.extra.alarm.MESSAGE=${encodedMessage};` +
-        `B.android.intent.extra.alarm.SKIP_UI=${skipUI ? 'true' : 'false'};` +
-        'end';
-
-      // deve essere chiamato in risposta a gesture utente
-      window.location.href = intentUri;
+      const url = `intent:#Intent;action=android.intent.action.SET_TIMER;S.android.intent.extra.message=Ricarica 80%;i.android.intent.extra.minutes=${totaleMinuti};end`;
+      window.location.href = url;
     }
 
-    // fallback: genera file .ics per aggiungere evento al calendario
-    function downloadICS(title, description, startDate, endDate) {
-      function formatDate(d){
-        return d.toISOString().replace(/[-:]/g,'').split('.')[0] + 'Z';
-      }
-      const ics =
-`BEGIN:VCALENDAR
+    function createCalendarEvent() {
+      const ora = new Date();
+      ora.setMinutes(ora.getMinutes() + Math.round(window.tempoRimanenteMinuti - parseInt(document.getElementById('avvisoPrima').value)));
+      const start = ora.toISOString().replace(/-|:|\.\d+/g, '');
+      const end = new Date(ora.getTime() + 5*60*1000).toISOString().replace(/-|:|\.\d+/g, '');
+      const title = encodeURIComponent("Ricarica auto all'80%");
+      const description = encodeURIComponent("La batteria ha raggiunto l'80%");
+      const icsContent = `BEGIN:VCALENDAR
 VERSION:2.0
-PRODID:-//Ricarica80//EN
 BEGIN:VEVENT
-UID:${Date.now()}@ricarica80
-DTSTAMP:${formatDate(new Date())}
-DTSTART:${formatDate(startDate)}
-DTEND:${formatDate(endDate)}
+DTSTART:${start}
+DTEND:${end}
 SUMMARY:${title}
 DESCRIPTION:${description}
 END:VEVENT
 END:VCALENDAR`;
-      const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'ricarica80-reminder.ics';
-      a.click();
-      URL.revokeObjectURL(url);
+      const blob = new Blob([icsContent], { type: 'text/calendar' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'Ricarica80.ics';
+      link.click();
+      URL.revokeObjectURL(link.href);
     }
 
-    // nuova impostaNotifica: avvia intent Android (se possibile) o fallback .ics
-    function impostaNotifica() {
-      const minutiTot = window.tempoRimanenteMinuti;
-      if (!minutiTot || isNaN(minutiTot)) return alert('Calcola prima il tempo fino all\'80%');
-
-      const minutiPrima = parseInt(document.getElementById('avvisoPrima').value, 10) || 0;
-      const minutiDaOra = Math.max(0, Math.round(minutiTot - minutiPrima));
-      if (minutiDaOra <= 0) return alert('Il tempo è già passato!');
-
-      const seconds = minutiDaOra * 60;
-      const message = minutiPrima === 0 ? "Il tuo veicolo è arrivato all'80%!" : `Tra ${minutiPrima} min: ricarica all'80%`;
-
-      const ua = navigator.userAgent || '';
-      const isAndroid = /Android/i.test(ua);
-      const isChrome = /Chrome/i.test(ua);
-
-      if (isAndroid && isChrome) {
-        // chiamato in risposta a click: apri intent
-        openAndroidTimerIntent(seconds, message, true);
-        document.getElementById('notificaAttiva').style.display = 'block';
-        document.getElementById('tempoNotifica').textContent = minutiPrima === 0 ? "quando arriverà all'80%" : `${minutiPrima} minuti prima`;
-        return;
-      }
-
-      // fallback per altri browser/piattaforme: offri .ics
-      if (confirm('L\'impostazione automatica del timer funziona solo su Android Chrome. Vuoi invece creare un promemoria nel calendario (file .ics)?')) {
-        const start = new Date();
-        start.setMinutes(start.getMinutes() + minutiDaOra);
-        const end = new Date(start.getTime() + 60 * 1000); // 1 minuto evento
-        downloadICS("Ricarica 80%", message, start, end);
-        document.getElementById('notificaAttiva').style.display = 'block';
-        document.getElementById('tempoNotifica').textContent = minutiPrima === 0 ? "quando arriverà all'80%" : `${minutiPrima} minuti prima`;
-      } else {
-        alert('Azione annullata. Per timer automatici usa Chrome su Android.');
-      }
+    // Disabilita notifiche SW fino a quando SW è corretto
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/Ricarica80/sw.js')
+        .then(() => console.log('SW registrato'))
+        .catch(e => console.error('SW registration failed', e));
     }
   </script>
-  
-  <script>
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/Ricarica80/sw.js')
-    .then(() => console.log('SW registrato'))
-    .catch(e => console.error('SW registration failed', e));
-}
-  </script>
-  
 </body>
 </html>
