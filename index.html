@@ -118,14 +118,17 @@
     .time-input { display:flex; gap:10px; }
     .time-input input { flex:1; }
 
-    .temp-section {
-  display:flex;
-  align-items:center;
-  gap:10px;
-  font-size:14px;
-  font-weight:500;
-  justify-content:flex-start;
+.temp-section {
+  background:rgba(0,170,255,0.1);
+  padding:15px;
+  border-radius:10px;
+  margin:15px 0
 }
+    .temp-section input[type="checkbox"] {
+      width:auto;
+      margin-right:10px;
+      vertical-align:middle
+    }
 
 
     button {
@@ -187,24 +190,31 @@
       <div class="tab" data-tab="manuale">Manuale</div>
     </div>
 
-<div class="temp-section" style="justify-content:flex-start; gap:10px;">
-  <input type="checkbox" id="usaTemp" onchange="toggleTemp()"/>
-  <label for="usaTemp">Considera temperatura ambiente</label>
-  <select id="temperatura" style="display:none;">
-    <option value="40">40°C – Molto caldo</option>
-    <option value="35">35°C – Caldo intenso</option>
-    <option value="30">30°C – Caldo</option>
-    <option value="25" selected>25°C – Ideale</option>
-    <option value="20">20°C – Normale</option>
-    <option value="15">15°C – Fresco</option>
-    <option value="10">10°C – Freddino</option>
-    <option value="5">5°C – Freddo</option>
-    <option value="0">0°C – Invernale</option>
-    <option value="-5">-5°C – Molto freddo</option>
-    <option value="-10">-10°C – Gelo</option>
-    <option value="-15">-15°C – Gelo forte</option>
-  </select>
-</div>
+    <div class="temp-section">
+      <label><input type="checkbox" id="usaTemp" onchange="toggleTemp()"/> Considera temperatura ambiente</label>
+      <p style="font-size:13.5px;color:#bbb;margin:8px 0 12px;line-height:1.4">
+        Il freddo rallenta le reazioni chimiche della batteria (fino a 2–3× più tempo)<br>
+        Il caldo forte attiva le protezioni del BMS e riduce la potenza accettata
+      </p>
+      <div class="disclaimer">
+        I valori sono indicativi e basati su test reali medi.<br>
+        Ogni auto si comporta in modo leggermente diverso.
+      </div>
+      <select id="temperatura" style="display:none;margin-top:10px;">
+        <option value="40">40°C – Molto caldo</option>
+        <option value="35">35°C – Caldo intenso</option>
+        <option value="30">30°C – Caldo</option>
+        <option value="25" selected>25°C – Ideale</option>
+        <option value="20">20°C – Normale</option>
+        <option value="15">15°C – Fresco</option>
+        <option value="10">10°C – Freddino</option>
+        <option value="5">5°C – Freddo</option>
+        <option value="0">0°C – Invernale</option>
+        <option value="-5">-5°C – Molto freddo</option>
+        <option value="-10">-10°C – Gelo</option>
+        <option value="-15">-15°C – Gelo forte</option>
+      </select>
+    </div>
 
 
     <div id="auto" class="content active">
