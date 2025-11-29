@@ -1,13 +1,14 @@
 {
   "name": "Ricarica 80%",
   "short_name": "Ricarica80",
-  "icons": [
-    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
-    { "src": "/icons/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
-  ],
-  "start_url": "/",
+  "start_url": "/Ricarica80/",
+  "scope": "/Ricarica80/",
   "display": "standalone",
   "background_color": "#0f0f0f",
-  "theme_color": "#00aaff"
+  "theme_color": "#00aaff",
+  "icons": [
+    { "src": "/Ricarica80/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/Ricarica80/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/Ricarica80/icons/apple-touch-icon.png", "sizes": "180x180", "type": "image/png", "purpose": "any" }
+  ]
 }
