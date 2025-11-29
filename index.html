@@ -1,282 +1,337 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Ricarica 80%</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ricarica 80%</title>
 
-<link rel="shortcut icon" href="/Ricarica80/icons/icon-192.png" sizes="192x192">
-<link rel="icon" href="/Ricarica80/icons/icon-192.png" sizes="192x192">
-<link rel="apple-touch-icon" href="/Ricarica80/icons/apple-touch-icon.png">
+  <link rel="shortcut icon" href="/Ricarica80/icons/icon-192.png" sizes="192x192">
+  <link rel="icon" href="/Ricarica80/icons/icon-192.png" sizes="192x192">
+  <link rel="apple-touch-icon" href="/Ricarica80/icons/apple-touch-icon.png">
+  <link rel="manifest" href="/Ricarica80/manifest.json?v=3">
 
-<link rel="manifest" href="/Ricarica80/manifest.json?v=3">
+  <meta name="theme-color" content="#00aaff">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Ricarica 80%">
 
-<meta name="theme-color" content="#00aaff">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Ricarica 80%">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
-<style>
-:root {--primary:#00aaff;--dark:#121212;--gray:#333;--timer:#ff6f00;--calendar:#00c853;}
-body {font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0f0f,#1a1a2e);color:#eee;margin:0;padding:20px;min-height:100vh;display:flex;align-items:center;justify-content:center;}
-.container {background:rgba(30,30,50,0.95);padding:30px;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,0.6);max-width:480px;width:100%;box-sizing:border-box}
-h1 {text-align:center;color:var(--primary);margin:0 0 8px 0;font-size:28px}
-.sottotitolo {text-align:center;color:#aaa;font-size:15px;margin-bottom:25px;line-height:1.4}
-.tabs {display:flex;margin-bottom:25px;border-bottom:2px solid #333}
-.tab {flex:1;padding:12px;text-align:center;cursor:pointer;background:#222;margin:0 5px;border-radius:10px 10px 0 0;transition:.3s}
-.tab.active {background:var(--primary);color:white}
-.content {display:none}
-.content.active {display:block}
-label {display:block;margin:15px 0 8px;font-weight:600}
-input, select {width:100%;padding:14px 16px;border:none;border-radius:10px;background:#333;color:white;font-size:16px;box-sizing:border-box;margin:0;}
-.time-input {display:flex;gap:12px}
-.time-input input {width:50%}
-.temp-section {background:rgba(0,170,255,0.1);padding:15px;border-radius:10px;margin:15px 0}
-.temp-section input[type="checkbox"] {width:auto;margin-right:10px;vertical-align:middle}
-button {margin-top:25px;width:100%;padding:15px;background:var(--primary);color:white;border:none;border-radius:10px;font-size:18px;font-weight:bold;cursor:pointer;transition:.3s}
-button:hover {background:#0088cc}
-.result {margin-top:25px;padding:20px;background:rgba(0,170,255,0.15);border-radius:12px;text-align:center;font-size:20px;display:none}
-.result.show {display:block}
-.time {font-size:32px;font-weight:bold;color:var(--primary)}
-.impact {font-size:16px;color:#ffaa00;margin-top:10px}
-.final-note {font-size:13px;color:#999;text-align:center;margin-top:15px;line-height:1.4}
-.disclaimer {font-size:12px;color:#888;margin-top:8px;line-height:1.3}
-.promemoria {margin-top:20px;padding:15px;background:rgba(0,200,0,0.15);border-radius:12px;display:none}
-.promemoria.show {display:block}
-.promemoria .btns {display:flex;gap:10px;justify-content:center;margin-top:10px;}
-.promemoria .btns button {flex:1;padding:12px;font-size:16px;font-weight:bold}
-#btnTimer {background: var(--timer); color:white;}
-#btnCalendario {background: var(--calendar); color:white;}
-.notifica-attiva {color:#00ff88;font-weight:bold;margin-top:10px;font-size:14px}
-</style>
+    :root {
+      --primary:#00aaff;
+      --accent:#00ffc3;
+      --dark:#0f0f15;
+      --gray:#444;
+      --light-gray:#bbb;
+      --bg-gradient:linear-gradient(135deg,#0f0f15,#1a1a30);
+    }
+
+    * {box-sizing:border-box; margin:0; padding:0;}
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: var(--bg-gradient);
+      color: #eee;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      min-height:100vh;
+      padding:20px;
+    }
+
+    .container {
+      background: rgba(30,30,50,0.95);
+      padding:30px 25px;
+      border-radius:25px;
+      box-shadow:0 12px 30px rgba(0,0,0,0.6);
+      max-width:480px;
+      width:100%;
+      display:flex;
+      flex-direction:column;
+      gap:20px;
+    }
+
+    h1 {
+      text-align:center;
+      font-size:30px;
+      color: var(--primary);
+      font-weight:700;
+    }
+
+    .subtitle {
+      text-align:center;
+      color: var(--light-gray);
+      font-size:14px;
+      line-height:1.4;
+      margin-bottom:15px;
+    }
+
+    .tabs {
+      display:flex;
+      gap:10px;
+      border-bottom:2px solid var(--gray);
+    }
+
+    .tab {
+      flex:1;
+      text-align:center;
+      padding:12px 0;
+      border-radius:12px 12px 0 0;
+      cursor:pointer;
+      background: var(--gray);
+      transition:0.3s;
+      font-weight:500;
+    }
+
+    .tab.active {
+      background: var(--primary);
+      color:white;
+    }
+
+    .content {
+      display:none;
+      flex-direction:column;
+      gap:15px;
+    }
+
+    .content.active { display:flex; }
+
+    label {
+      font-weight:500;
+      margin-bottom:5px;
+      font-size:14px;
+    }
+
+    input, select {
+      width:100%;
+      padding:12px 14px;
+      border-radius:12px;
+      border:none;
+      background: var(--gray);
+      color:white;
+      font-size:15px;
+    }
+
+    .time-input { display:flex; gap:10px; }
+    .time-input input { flex:1; }
+
+    button {
+      margin-top:10px;
+      padding:14px;
+      font-size:16px;
+      font-weight:600;
+      border:none;
+      border-radius:14px;
+      cursor:pointer;
+      background: var(--accent);
+      color:#0f0f15;
+      transition:0.3s;
+    }
+
+    button:hover { background:#00e6b8; }
+
+    .result {
+      background: rgba(0,170,255,0.1);
+      border-radius:16px;
+      padding:20px;
+      text-align:center;
+      font-size:18px;
+      display:none;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .result.show { display:flex; }
+
+    .time {
+      font-size:32px;
+      font-weight:700;
+      color: var(--primary);
+    }
+
+    .impact {
+      font-size:14px;
+      color: #ffaa00;
+    }
+
+    .disclaimer {
+      font-size:12px;
+      color: var(--light-gray);
+      line-height:1.4;
+      margin-top:10px;
+    }
+
+    #temperatura { margin-top:5px; }
+  </style>
 </head>
 <body>
-<div class="container">
-<h1>Ricarica 80%</h1>
-<div class="sottotitolo">Fermarsi all'80% allunga la vita della batteria</div>
+  <div class="container">
+    <h1>Ricarica 80%</h1>
+    <div class="subtitle">
+      Fermarsi all'80% allunga la vita della batteria
+    </div>
 
-<div class="tabs">
-  <div class="tab active" data-tab="auto">Automatica</div>
-  <div class="tab" data-tab="manuale">Manuale</div>
-</div>
+    <div class="tabs">
+      <div class="tab active" data-tab="auto">Automatica</div>
+      <div class="tab" data-tab="manuale">Manuale</div>
+    </div>
 
-<div class="temp-section">
-<label><input type="checkbox" id="usaTemp" onchange="toggleTemp()"/> Considera temperatura ambiente</label>
-<p style="font-size:13.5px;color:#bbb;margin:8px 0 12px;line-height:1.4">
-Il freddo rallenta le reazioni chimiche della batteria (fino a 2–3× più tempo)<br>
-Il caldo forte attiva le protezioni del BMS e riduce la potenza accettata
-</p>
-<div class="disclaimer">
-I valori sono indicativi e basati su test reali medi.<br>
-Ogni auto si comporta in modo leggermente diverso.
-</div>
-<select id="temperatura" style="display:none;margin-top:10px;">
-  <option value="40">40°C – Molto caldo</option>
-  <option value="35">35°C – Caldo intenso</option>
-  <option value="30">30°C – Caldo</option>
-  <option value="25" selected>25°C – Ideale</option>
-  <option value="20">20°C – Normale</option>
-  <option value="15">15°C – Fresco</option>
-  <option value="10">10°C – Freddino</option>
-  <option value="5">5°C – Freddo</option>
-  <option value="0">0°C – Invernale</option>
-  <option value="-5">-5°C – Molto freddo</option>
-  <option value="-10">-10°C – Gelo</option>
-  <option value="-15">-15°C – Gelo forte</option>
-</select>
-</div>
+    <div class="temp-section">
+      <label><input type="checkbox" id="usaTemp" onchange="toggleTemp()"/> Considera temperatura ambiente</label>
+      <select id="temperatura" style="display:none;">
+        <option value="40">40°C – Molto caldo</option>
+        <option value="35">35°C – Caldo intenso</option>
+        <option value="30">30°C – Caldo</option>
+        <option value="25" selected>25°C – Ideale</option>
+        <option value="20">20°C – Normale</option>
+        <option value="15">15°C – Fresco</option>
+        <option value="10">10°C – Freddino</option>
+        <option value="5">5°C – Freddo</option>
+        <option value="0">0°C – Invernale</option>
+        <option value="-5">-5°C – Molto freddo</option>
+        <option value="-10">-10°C – Gelo</option>
+        <option value="-15">-15°C – Gelo forte</option>
+      </select>
+      <div class="disclaimer">
+        I valori sono indicativi e basati su test reali medi.<br>
+        Ogni auto si comporta in modo leggermente diverso.
+      </div>
+    </div>
 
-<div id="auto" class="content active">
-<label>Batteria attuale (%)</label>
-<input type="number" id="percAttualeAuto" min="1" max="99" value="32"/>
-<label>Tempo stimato dall'auto per il 100%</label>
-<div class="time-input">
-  <input type="number" id="ore100" min="0" max="48" value="5" placeholder="Ore">
-  <input type="number" id="min100" min="0" max="59" value="15" placeholder="Min">
-</div>
-<button onclick="calcolaAutomatico()">Calcola tempo per 80%</button>
-</div>
+    <div id="auto" class="content active">
+      <label>Batteria attuale (%)</label>
+      <input type="number" id="percAttualeAuto" min="1" max="99" value="32"/>
+      <label>Tempo stimato dall'auto per il 100%</label>
+      <div class="time-input">
+        <input type="number" id="ore100" min="0" max="48" value="5" placeholder="Ore">
+        <input type="number" id="min100" min="0" max="59" value="15" placeholder="Min">
+      </div>
+      <button onclick="calcolaAutomatico()">Calcola tempo per 80%</button>
+    </div>
 
-<div id="manuale" class="content">
-<label>Seleziona il modello auto</label>
-<select id="modelloAuto" onchange="impostaCapacita()">
-  <option value="altro">Altro (inserisci manualmente)</option>
-  <option value="spring">Dacia Spring Electric (26,8 kWh)</option>
-</select>
-<label>Capacità batteria (kWh)</label>
-<input type="number" step="0.1" id="capacita" placeholder="es. 26.8"/>
-<label>Batteria attuale (%)</label>
-<input type="number" id="percAttuale" min="1" max="99" value="28"/>
-<label>Potenza di ricarica reale (kW)</label>
-<input type="number" step="0.1" id="potenza" value="7.4"/>
-<button onclick="calcolaManuale()">Calcola tempo per 80%</button>
-</div>
+    <div id="manuale" class="content">
+      <label>Seleziona il modello auto</label>
+      <select id="modelloAuto" onchange="impostaCapacita()">
+        <option value="altro">Altro (inserisci manualmente)</option>
+        <option value="spring">Dacia Spring Electric (26,8 kWh)</option>
+      </select>
+      <label>Capacità batteria (kWh)</label>
+      <input type="number" step="0.1" id="capacita" placeholder="es. 26.8"/>
+      <label>Batteria attuale (%)</label>
+      <input type="number" id="percAttuale" min="1" max="99" value="28"/>
+      <label>Potenza di ricarica reale (kW)</label>
+      <input type="number" step="0.1" id="potenza" value="7.4"/>
+      <button onclick="calcolaManuale()">Calcola tempo per 80%</button>
+    </div>
 
-<div id="risultato" class="result">
-<div>Mancano <span id="tempoRimanente" class="time">3h 12min</span></div>
-<div>Arrivo all'80% previsto per le <span id="orarioFinale" class="time">22:47</span></div>
-<div id="impattoTemp" class="impact" style="display:none;"></div>
+    <div id="risultato" class="result">
+      <div>Mancano <span id="tempoRimanente" class="time">3h 12min</span></div>
+      <div>Arrivo all'80% previsto per le <span id="orarioFinale" class="time">22:47</span></div>
+      <div id="impattoTemp" class="impact" style="display:none;"></div>
+    </div>
+  </div>
 
-<div class="final-note">
-I risultati sono stime indicative.<br>
-Il tempo reale può variare in base a molti fattori.
-</div>
+  <script>
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.onclick = () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.tab).classList.add('active');
+      };
+    });
 
-<div id="promemoria" class="promemoria">
-<p>Imposta un promemoria</p>
-<select id="avvisoPrima">
-  <option value="0">All'arrivo all'80%</option>
-  <option value="5">5 minuti prima</option>
-  <option value="10">10 minuti prima</option>
-  <option value="15" selected>15 minuti prima</option>
-</select>
+    function toggleTemp() {
+      document.getElementById('temperatura').style.display =
+        document.getElementById('usaTemp').checked ? 'block' : 'none';
+    }
 
-<div class="btns">
-  <button id="btnTimer">Timer</button>
-  <button id="btnCalendario">Calendario</button>
-</div>
-<div id="notificaAttiva" class="notifica-attiva" style="display:none;">
-Notifica attiva! Ti avviserò tra <span id="tempoNotifica"></span>
-</div>
-</div>
-</div>
+    function impostaCapacita() {
+      const sel = document.getElementById('modelloAuto');
+      const input = document.getElementById('capacita');
+      if (sel.value === "spring") {
+        input.value = "26.8"; input.readOnly = true; input.style.background = "#444";
+      } else {
+        input.value = ""; input.readOnly = false; input.style.background = "#333"; input.focus();
+      }
+    }
 
-<script>
-document.querySelectorAll('.tab').forEach(tab => {
-  tab.onclick = () => {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
-    tab.classList.add('active');
-    document.getElementById(tab.dataset.tab).classList.add('active');
-  };
-});
+    function getTempFactor(temp, potenza = null) {
+      temp = parseFloat(temp);
+      const isSlowCharge = potenza !== null && potenza <= 3.8;
+      if (temp >= 15) return 1.0;
+      if (isSlowCharge) {
+        if (temp >= 10) return 1.35;
+        if (temp >= 7)  return 1.70;
+        if (temp >= 3)  return 2.12;
+        if (temp >= 0)  return 2.45;
+        if (temp >= -5) return 2.80;
+        return 3.1 + (temp * -0.07);
+      } else {
+        if (temp >= 10) return 1.15;
+        if (temp >= 7)  return 1.35;
+        if (temp >= 3)  return 1.62;
+        if (temp >= 0)  return 1.85;
+        return 2.1 + (temp * -0.05);
+      }
+    }
 
-function toggleTemp() {
-  document.getElementById('temperatura').style.display =
-    document.getElementById('usaTemp').checked ? 'block' : 'none';
-}
+    function calcolaAutomatico() { calcola(true); }
+    function calcolaManuale() { calcola(false); }
 
-function impostaCapacita() {
-  const sel = document.getElementById('modelloAuto');
-  const input = document.getElementById('capacita');
-  if (sel.value === "spring") {
-    input.value = "26.8"; input.readOnly = true; input.style.background = "#444";
-  } else {
-    input.value = ""; input.readOnly = false; input.style.background = "#333"; input.focus();
-  }
-}
+    function calcola(isAuto) {
+      let perc, tempo100min = 0, cap = 0, kw = 0;
+      if (isAuto) {
+        perc = parseFloat(document.getElementById('percAttualeAuto').value) || 0;
+        const ore = parseInt(document.getElementById('ore100').value) || 0;
+        const min = parseInt(document.getElementById('min100').value) || 0;
+        tempo100min = ore * 60 + min;
+      } else {
+        perc = parseFloat(document.getElementById('percAttuale').value) || 0;
+        cap = parseFloat(document.getElementById('capacita').value) || 0;
+        kw = parseFloat(document.getElementById('potenza').value) || 0;
+      }
 
-function getTempFactor(temp, potenza = null) {
-  temp = parseFloat(temp);
-  const isSlowCharge = potenza !== null && potenza <= 3.8;
-  if (temp >= 15) return 1.0;
-  if (isSlowCharge) {
-    if (temp >= 10) return 1.35;
-    if (temp >= 7)  return 1.70;
-    if (temp >= 3)  return 2.12;
-    if (temp >= 0)  return 2.45;
-    if (temp >= -5) return 2.80;
-    return 3.1 + (temp * -0.07);
-  } else {
-    if (temp >= 10) return 1.15;
-    if (temp >= 7)  return 1.35;
-    if (temp >= 3)  return 1.62;
-    if (temp >= 0)  return 1.85;
-    return 2.1 + (temp * -0.05);
-  }
-}
+      const usaTemp = document.getElementById('usaTemp').checked;
+      const temp = usaTemp ? document.getElementById('temperatura').value : 25;
 
-function calcolaAutomatico() { calcola(true); }
-function calcolaManuale() { calcola(false); }
+      if (perc < 1 || perc >= 100 || (isAuto && tempo100min <= 0) || (!isAuto && (!cap || !kw))) {
+        return alert("Controlla i dati inseriti");
+      }
 
-function calcola(isAuto) {
-  let perc, tempo100min = 0, cap = 0, kw = 0;
-  if (isAuto) {
-    perc = parseFloat(document.getElementById('percAttualeAuto').value) || 0;
-    const ore = parseInt(document.getElementById('ore100').value) || 0;
-    const min = parseInt(document.getElementById('min100').value) || 0;
-    tempo100min = ore * 60 + min;
-  } else {
-    perc = parseFloat(document.getElementById('percAttuale').value) || 0;
-    cap = parseFloat(document.getElementById('capacita').value) || 0;
-    kw = parseFloat(document.getElementById('potenza').value) || 0;
-  }
+      const tempoBaseMin = isAuto
+        ? (80 - perc) / (100 - perc) * tempo100min
+        : ((80 - perc) / 100 * cap / kw) * 60;
 
-  const usaTemp = document.getElementById('usaTemp').checked;
-  const temp = usaTemp ? document.getElementById('temperatura').value : 25;
+      const fattore = usaTemp ? getTempFactor(temp, isAuto ? null : kw) : 1;
+      const tempoFinaleMin = tempoBaseMin * fattore;
 
-  if (perc < 1 || perc >= 100 || (isAuto && tempo100min <= 0) || (!isAuto && (!cap || !kw))) {
-    return alert("Controlla i dati inseriti");
-  }
+      const impatto = usaTemp && fattore > 1.01
+        ? `Temperatura ${temp}°C → +${Math.round((fattore-1)*100)}% tempo`
+        : usaTemp ? `Temperatura ${temp}°C → nessun impatto` : '';
 
-  const tempoBaseMin = isAuto
-    ? (80 - perc) / (100 - perc) * tempo100min
-    : ((80 - perc) / 100 * cap / kw) * 60;
+      mostraRisultato(tempoFinaleMin, impatto);
+    }
 
-  const fattore = usaTemp ? getTempFactor(temp, isAuto ? null : kw) : 1;
-  const tempoFinaleMin = tempoBaseMin * fattore;
+    function mostraRisultato(minutiTotali, impatto) {
+      const h = Math.floor(minutiTotali/60);
+      const m = Math.round(minutiTotali%60);
+      const testo = h > 0 ? `${h}h ${m}min` : `${m} minuti`;
 
-  const impatto = usaTemp && fattore > 1.01
-    ? `Temperatura ${temp}°C → +${Math.round((fattore-1)*100)}% tempo`
-    : usaTemp ? `Temperatura ${temp}°C → nessun impatto` : '';
+      const ora = new Date();
+      ora.setMinutes(ora.getMinutes() + Math.round(minutiTotali));
+      const orario = ora.toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'});
 
-  mostraRisultato(tempoFinaleMin, impatto);
-}
+      document.getElementById('tempoRimanente').textContent = testo;
+      document.getElementById('orarioFinale').textContent = orario;
+      const el = document.getElementById('impattoTemp');
+      if (impatto) { el.textContent = impatto; el.style.display = 'block'; }
+      else el.style.display = 'none';
 
-function mostraRisultato(minutiTotali, impatto) {
-  const h = Math.floor(minutiTotali/60);
-  const m = Math.round(minutiTotali%60);
-  const testo = h > 0 ? `${h}h ${m}min` : `${m} minuti`;
-
-  const ora = new Date();
-  ora.setMinutes(ora.getMinutes() + Math.round(minutiTotali));
-  const orario = ora.toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'});
-
-  document.getElementById('tempoRimanente').textContent = testo;
-  document.getElementById('orarioFinale').textContent = orario;
-  const el = document.getElementById('impattoTemp');
-  if (impatto) { el.textContent = impatto; el.style.display = 'block'; }
-  else el.style.display = 'none';
-
-  document.getElementById('risultato').classList.add('show');
-  document.getElementById('promemoria').classList.add('show');
-  window.tempoRimanenteMinuti = minutiTotali;
-  document.getElementById('tempoNotifica').textContent = Math.round(minutiTotali) + " minuti";
-}
-
-// Timer e Calendario
-document.getElementById('btnTimer').onclick = () => {
-  const totaleMinuti = Math.round(window.tempoRimanenteMinuti - parseInt(document.getElementById('avvisoPrima').value));
-  const isAndroidChrome = /Android/.test(navigator.userAgent) && /Chrome/.test(navigator.userAgent);
-  if (isAndroidChrome) {
-    const intentUrl = `intent://#Intent;action=android.intent.action.SET_TIMER;S.android.intent.extra.message=Ricarica 80%;i.android.intent.extra.minutes=${totaleMinuti};end`;
-    window.location.href = intentUrl;
-  } else {
-    alert(`Imposta manualmente un timer di ${totaleMinuti} minuti`);
-  }
-};
-
-document.getElementById('btnCalendario').onclick = () => {
-  const totaleMinuti = Math.round(window.tempoRimanenteMinuti - parseInt(document.getElementById('avvisoPrima').value));
-  const oraArrivo = new Date();
-  oraArrivo.setMinutes(oraArrivo.getMinutes() + totaleMinuti);
-  const oraFine = new Date(oraArrivo.getTime() + 5*60*1000);
-  const titolo = "Ricarica batteria 80%";
-  const descrizione = "Il tuo veicolo ha raggiunto l'80% di carica";
-  function fmt(d){ return d.toISOString().replace(/[-:]/g,'').split('.')[0] + 'Z'; }
-  const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(titolo)}&details=${encodeURIComponent(descrizione)}&dates=${fmt(oraArrivo)}/${fmt(oraFine)}`;
-  window.open(url, '_blank');
-};
-</script>
-
-<script>
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/Ricarica80/sw.js')
-    .then(() => console.log('SW registrato'))
-    .catch(e => console.error('SW registration failed', e));
-}
-</script>
-
+      document.getElementById('risultato').classList.add('show');
+    }
+  </script>
 </body>
 </html>
