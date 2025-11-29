@@ -5,10 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Ricarica 80%</title>
 
+  <!-- icone -->
   <link rel="shortcut icon" href="/Ricarica80/icons/icon-192.png" sizes="192x192">
   <link rel="icon" href="/Ricarica80/icons/icon-192.png" sizes="192x192">
   <link rel="apple-touch-icon" href="/Ricarica80/icons/apple-touch-icon.png">
-  <link rel="manifest" href="/Ricarica80/manifest.json?v=2">
+  <link rel="manifest" href="/Ricarica80/manifest.json?v=3">
 
   <meta name="theme-color" content="#00aaff">
   <meta name="mobile-web-app-capable" content="yes">
@@ -43,14 +44,18 @@
     .disclaimer {font-size:12px;color:#888;margin-top:8px;line-height:1.3}
     .promemoria {margin-top:20px;padding:15px;background:rgba(0,200,0,0.15);border-radius:12px;display:none}
     .promemoria.show {display:block}
-    .promemoria button {background:#00c853;font-size:16px;padding:12px}
+    .promemoria button {font-size:16px;padding:12px;border:none;border-radius:10px;cursor:pointer;transition:.3s}
+    #btnTimer {background:#2196f3;color:white;flex:1}
+    #btnCalendario {background:#4caf50;color:white;flex:1}
     .notifica-attiva {color:#00ff88;font-weight:bold;margin-top:10px;font-size:14px}
   </style>
 </head>
 <body>
   <div class="container">
     <h1>Ricarica 80%</h1>
-    <div class="sottotitolo">Fermarsi all'80% allunga la vita della batteria</div>
+    <div class="sottotitolo">
+      Fermarsi all'80% allunga la vita della batteria
+    </div>
 
     <div class="tabs">
       <div class="tab active" data-tab="auto">Automatica</div>
@@ -113,7 +118,7 @@
       <div>Mancano <span id="tempoRimanente" class="time">3h 12min</span></div>
       <div>Arrivo all'80% previsto per le <span id="orarioFinale" class="time">22:47</span></div>
       <div id="impattoTemp" class="impact" style="display:none;"></div>
-      
+
       <div class="final-note">
         I risultati sono stime indicative.<br>
         Il tempo reale può variare in base a molti fattori.
@@ -127,9 +132,9 @@
           <option value="10">10 minuti prima</option>
           <option value="15" selected>15 minuti prima</option>
         </select>
-        <div style="display:flex; gap:10px; margin-top:10px;">
-          <button onclick="openTimerIntent()">Apri Timer Orologio</button>
-          <button onclick="createCalendarEvent()">Apri Calendario</button>
+        <div style="display:flex;gap:10px;margin-top:10px;">
+          <button id="btnTimer">Timer</button>
+          <button id="btnCalendario">Calendario</button>
         </div>
         <div id="notificaAttiva" class="notifica-attiva" style="display:none;">
           Notifica attiva! Ti avviserò tra <span id="tempoNotifica"></span>
@@ -139,8 +144,6 @@
   </div>
 
   <script>
-    let timeoutNotifica = null;
-
     document.querySelectorAll('.tab').forEach(tab => {
       tab.onclick = () => {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -242,40 +245,41 @@
       window.tempoRimanenteMinuti = minutiTotali;
     }
 
-    function openTimerIntent() {
+    function impostaNotifica() {
       const minutiPrima = parseInt(document.getElementById('avvisoPrima').value);
       const totaleMinuti = Math.round(window.tempoRimanenteMinuti - minutiPrima);
       if (totaleMinuti <= 0) return alert("Il tempo è già passato!");
 
-      const url = `intent:#Intent;action=android.intent.action.SET_TIMER;S.android.intent.extra.message=Ricarica 80%;i.android.intent.extra.minutes=${totaleMinuti};end`;
-      window.location.href = url;
-    }
+      document.getElementById('notificaAttiva').style.display = 'block';
+      document.getElementById('tempoNotifica').textContent =
+        minutiPrima === 0 ? "quando arriverà all'80%" : `${minutiPrima} minuti prima`;
 
-    function createCalendarEvent() {
-      const ora = new Date();
-      ora.setMinutes(ora.getMinutes() + Math.round(window.tempoRimanenteMinuti - parseInt(document.getElementById('avvisoPrima').value)));
-      const start = ora.toISOString().replace(/-|:|\.\d+/g, '');
-      const end = new Date(ora.getTime() + 5*60*1000).toISOString().replace(/-|:|\.\d+/g, '');
-      const title = encodeURIComponent("Ricarica auto all'80%");
-      const description = encodeURIComponent("La batteria ha raggiunto l'80%");
-      const icsContent = `BEGIN:VCALENDAR
-VERSION:2.0
-BEGIN:VEVENT
-DTSTART:${start}
-DTEND:${end}
-SUMMARY:${title}
-DESCRIPTION:${description}
-END:VEVENT
-END:VCALENDAR`;
-      const blob = new Blob([icsContent], { type: 'text/calendar' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = 'Ricarica80.ics';
-      link.click();
-      URL.revokeObjectURL(link.href);
-    }
+      // Pulsante Timer
+      document.getElementById('btnTimer').onclick = () => {
+        const isAndroidChrome = /Android/.test(navigator.userAgent) && /Chrome/.test(navigator.userAgent);
+        if (isAndroidChrome) {
+          const intentUrl = `intent://#Intent;action=android.intent.action.SET_TIMER;S.android.intent.extra.message=Ricarica 80%;i.android.intent.extra.minutes=${totaleMinuti};end`;
+          window.location.href = intentUrl;
+        } else {
+          alert(`Imposta manualmente un timer di ${totaleMinuti} minuti`);
+        }
+      };
 
-    // Disabilita notifiche SW fino a quando SW è corretto
+      // Pulsante Calendario
+      document.getElementById('btnCalendario').onclick = () => {
+        const oraArrivo = new Date();
+        oraArrivo.setMinutes(oraArrivo.getMinutes() + totaleMinuti);
+        const oraFine = new Date(oraArrivo.getTime() + 5*60*1000); // durata evento 5 min
+        const titolo = "Ricarica batteria 80%";
+        const descrizione = "Il tuo veicolo ha raggiunto l'80% di carica";
+        function fmt(d){ return d.toISOString().replace(/[-:]/g,'').split('.')[0] + 'Z'; }
+        const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(titolo)}&details=${encodeURIComponent(descrizione)}&dates=${fmt(oraArrivo)}/${fmt(oraFine)}`;
+        window.open(url, '_blank');
+      };
+    }
+  </script>
+
+  <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/Ricarica80/sw.js')
         .then(() => console.log('SW registrato'))
