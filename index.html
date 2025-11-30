@@ -5,10 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Ricarica 80%</title>
 
-  <link rel="shortcut icon" href="/Ricarica80/icons/icon-192.png" sizes="192x192">
-  <link rel="icon" href="/Ricarica80/icons/icon-192.png" sizes="192x192">
-  <link rel="apple-touch-icon" href="/Ricarica80/icons/apple-touch-icon.png">
-  <link rel="manifest" href="/Ricarica80/manifest.json?v=5">
+  <!-- ICONS (adatta i percorsi se le icone sono in una sottocartella "icons") -->
+  <link rel="shortcut icon" href="icons/icon-192.png" type="image/png">
+  <link rel="icon" href="icons/icon-192.png" sizes="192x192">
+  <link rel="icon" href="icons/icon-512.png" sizes="512x512">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="manifest" href="manifest.json">
 
   <meta name="theme-color" content="#00aaff">
   <meta name="mobile-web-app-capable" content="yes">
@@ -18,143 +20,31 @@
 
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
-
-    :root {
-      --primary:#00aaff;
-      --dark:#0f0f15;
-      --white:#ffffff;
-      --gray:#222;
-      --light-gray:#bbb;
-      --accent:#00aaff;
-      --bg-gradient: linear-gradient(135deg,#0f0f15,#1a1a1f);
-    }
-
+    :root {--primary:#00aaff;--dark:#0f0f15;--gray:#222;--light-gray:#bbb;--bg-gradient: linear-gradient(135deg,#0f0f15,#1a1a1f);}
     * {box-sizing:border-box;margin:0;padding:0;}
-
-    body {
-      font-family: 'Roboto', sans-serif;
-      background: var(--bg-gradient);
-      color: var(--white);
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      min-height:100vh;
-      padding:20px;
-    }
-
-    .container {
-      background: var(--dark);
-      padding:30px 25px;
-      border-radius:25px;
-      box-shadow:0 12px 30px rgba(0,0,0,0.6);
-      max-width:480px;
-      width:100%;
-      display:flex;
-      flex-direction:column;
-      gap:20px;
-    }
-
-    h1 {
-      text-align:center;
-      font-size:30px;
-      color: var(--primary);
-      font-weight:700;
-    }
-
-    .subtitle {
-      text-align:center;
-      color: var(--light-gray);
-      font-size:14px;
-      line-height:1.4;
-      margin-bottom:15px;
-    }
-
-    .tabs {
-      display:flex;
-      gap:10px;
-      border-bottom:2px solid var(--gray);
-    }
-
-    .tab {
-      flex:1;
-      text-align:center;
-      padding:12px 0;
-      border-radius:12px 12px 0 0;
-      cursor:pointer;
-      background: var(--gray);
-      transition:0.3s;
-      font-weight:500;
-    }
-
-    .tab.active {
-      background: var(--primary);
-      color:white;
-    }
-
-    .content {
-      display:none;
-      flex-direction:column;
-      gap:15px;
-    }
-
-    .content.active { display:flex; }
-
-    label {
-      font-weight:500;
-      margin-bottom:5px;
-      font-size:14px;
-    }
-
-    input, select {
-      width:100%;
-      padding:12px 14px;
-      border-radius:12px;
-      border:none;
-      background: var(--gray);
-      color:white;
-      font-size:15px;
-    }
-
-    .time-input { display:flex; gap:10px; }
-    .time-input input { flex:1; }
-
-    .temp-section {background:rgba(0,170,255,0.1);padding:15px;border-radius:10px;margin:15px 0}
-    .temp-section input[type="checkbox"] {width:auto;margin-right:10px;vertical-align:middle}
-    button {margin-top:25px;width:100%;padding:15px;background:var(--primary);color:white;border:none;border-radius:10px;font-size:18px;font-weight:bold;cursor:pointer;transition:.3s}
-    button:hover {background:#0088cc}
-
-    .result {
-      background: rgba(0,170,255,0.1);
-      border-radius:16px;
-      padding:20px;
-      text-align:center;
-      font-size:18px;
-      display:none;
-      flex-direction:column;
-      gap:10px;
-    }
-
-    .result.show { display:flex; }
-
-    .time {
-      font-size:32px;
-      font-weight:700;
-      color: var(--primary);
-    }
-
-    .impact {
-      font-size:14px;
-      color: #ffaa00;
-    }
-
-    .disclaimer {
-      font-size:12px;
-      color: var(--light-gray);
-      line-height:1.4;
-      margin-top:10px;
-    }
-
-    #temperatura { margin-left:20px; }
+    body {font-family:'Roboto',sans-serif;background:var(--bg-gradient);color:white;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px;}
+    .container {background:var(--dark);padding:30px 25px;border-radius:25px;box-shadow:0 12px 30px rgba(0,0,0,0.6);max-width:480px;width:100%;display:flex;flex-direction:column;gap:20px;}
+    h1 {text-align:center;font-size:30px;color:var(--primary);font-weight:700;}
+    .subtitle {text-align:center;color:var(--light-gray);font-size:14px;line-height:1.4;margin-bottom:15px;}
+    .tabs {display:flex;gap:10px;border-bottom:2px solid var(--gray);}
+    .tab {flex:1;text-align:center;padding:12px 0;border-radius:12px 12px 0 0;cursor:pointer;background:var(--gray);transition:0.3s;font-weight:500;}
+    .tab.active {background:var(--primary);color:white;}
+    .content {display:none;flex-direction:column;gap:15px;}
+    .content.active {display:flex;}
+    label {font-weight:500;margin-bottom:5px;font-size:14px;}
+    input, select {width:100%;padding:12px 14px;border-radius:12px;border:none;background:var(--gray);color:white;font-size:15px;}
+    .time-input {display:flex;gap:10px;}
+    .time-input input {flex:1;}
+    .temp-section {background:rgba(0,170,255,0.1);padding:15px;border-radius:10px;}
+    .temp-section input[type="checkbox"] {width:auto;margin-right:10px;vertical-align:middle;}
+    button {margin-top:20px;padding:15px;background:var(--primary);color:white;border:none;border-radius:10px;font-size:18px;font-weight:bold;cursor:pointer;transition:.3s;}
+    button:hover {background:#0088cc;}
+    .result {background:rgba(0,170,255,0.1);border-radius:16px;padding:20px;text-align:center;display:none;flex-direction:column;gap:10px;}
+    .result.show {display:flex;}
+    .time {font-size:32px;font-weight:700;color:var(--primary);}
+    .impact {font-size:14px;color:#ffaa00;}
+    .disclaimer {font-size:12px;color:var(--light-gray);line-height:1.4;margin-top:10px;}
+    #temperatura {display:none;margin-top:10px;}
   </style>
 </head>
 <body>
@@ -169,10 +59,8 @@
 
     <div class="temp-section">
       <label><input type="checkbox" id="usaTemp" onchange="toggleTemp()"/> Considera temperatura ambiente</label>
-      <div class="disclaimer">
-        I valori sono indicativi e basati su test reali medi.
-      </div>
-      <select id="temperatura" style="display:none;margin-top:10px;">
+      <div class="disclaimer">I valori sono basati sui tuoi test reali (5 °C → fattore ×2,12 con 3,7 kW)</div>
+      <select id="temperatura">
         <option value="40">40°C – Molto caldo</option>
         <option value="35">35°C – Caldo intenso</option>
         <option value="30">30°C – Caldo</option>
@@ -188,14 +76,13 @@
       </select>
     </div>
 
-
     <div id="auto" class="content active">
       <label>Batteria attuale (%)</label>
-      <input type="number" id="percAttualeAuto" min="1" max="99" value="32"/>
+      <input type="number" id="percAttualeAuto" min="1" max="99" value="40"/>
       <label>Tempo stimato dall'auto per il 100%</label>
       <div class="time-input">
-        <input type="number" id="ore100" min="0" max="48" value="5" placeholder="Ore">
-        <input type="number" id="min100" min="0" max="59" value="15" placeholder="Min">
+        <input type="number" id="ore100" min="0" max="48" value="7" placeholder="Ore">
+        <input type="number" id="min100" min="0" max="59" value="13" placeholder="Min">
       </div>
       <button onclick="calcolaAutomatico()">Calcola tempo per 80%</button>
     </div>
@@ -204,25 +91,26 @@
       <label>Seleziona il modello auto</label>
       <select id="modelloAuto" onchange="impostaCapacita()">
         <option value="altro">Altro (inserisci manualmente)</option>
-        <option value="spring">Dacia Spring Electric (26,8 kWh)</option>
+        <option value="spring" selected>Dacia Spring Electric (26,8 kWh)</option>
       </select>
       <label>Capacità batteria (kWh)</label>
-      <input type="number" step="0.1" id="capacita" placeholder="es. 26.8"/>
+      <input type="number" step="0.1" id="capacita" value="26.8" readonly style="background:#333;"/>
       <label>Batteria attuale (%)</label>
-      <input type="number" id="percAttuale" min="1" max="99" value="28"/>
+      <input type="number" id="percAttuale" min="1" max="99" value="40"/>
       <label>Potenza di ricarica reale (kW)</label>
-      <input type="number" step="0.1" id="potenza" value="7.4"/>
+      <input type="number" step="0.1" id="potenza" value="3.7"/>
       <button onclick="calcolaManuale()">Calcola tempo per 80%</button>
     </div>
 
     <div id="risultato" class="result">
-      <div>Mancano <span id="tempoRimanente" class="time">3h 12min</span></div>
-      <div>Arrivo all'80% previsto per le <span id="orarioFinale" class="time">22:47</span></div>
-      <div id="impattoTemp" class="impact" style="display:none;"></div>
+      <div>Mancano <span id="tempoRimanente" class="time">5h 27min</span></div>
+      <div>Arrivo all'80% previsto per le <span id="orarioFinale" class="time">03:47</span></div>
+      <div id="impattoTemp" class="impact"></div>
     </div>
   </div>
 
   <script>
+    // Tab
     document.querySelectorAll('.tab').forEach(tab => {
       tab.onclick = () => {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -241,12 +129,13 @@
       const sel = document.getElementById('modelloAuto');
       const input = document.getElementById('capacita');
       if (sel.value === "spring") {
-        input.value = "26.8"; input.readOnly = true; input.style.background = "#222";
+        input.value = "26.8"; input.readOnly = true; input.style.background = "#333";
       } else {
         input.value = ""; input.readOnly = false; input.style.background = "#222"; input.focus();
       }
     }
 
+    // CURVA CALIBRATA SUI TUOI TEST REALI (5°C → ×2,12 con 3,7 kW)
     function getTempFactor(temp, potenza = null) {
       temp = parseFloat(temp);
       const isSlowCharge = potenza !== null && potenza <= 3.8;
@@ -315,10 +204,12 @@
 
       document.getElementById('tempoRimanente').textContent = testo;
       document.getElementById('orarioFinale').textContent = orario;
+
       const el = document.getElementById('impattoTemp');
       if (impatto) { el.textContent = impatto; el.style.display = 'block'; }
       else el.style.display = 'none';
 
+      // ← RIGA CORRETTA (prima mancava!)
       document.getElementById('risultato').classList.add('show');
     }
   </script>
