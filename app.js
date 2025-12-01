@@ -1,8 +1,8 @@
-// app.js – versione definitiva 02-12-2025
+// app.js – VERSIONE CORRETTA E DEFINITIVA 02-12-2025
 document.querySelectorAll('.tab').forEach(tab => {
   tab.onclick = () => {
-    document.querySelectorAll('.tab,.content').forEach(el => el.classList.remove('active'));
-    tab.classList>add('active');
+    document.querySelectorAll('.tab, .content').forEach(el => el.classList.remove('active'));
+    tab.classList.add('active');                         // ← punto corretto!
     document.getElementById(tab.dataset.tab).classList.add('active');
   };
 });
@@ -15,13 +15,16 @@ function toggleTemp() {
 function impostaCapacita() {
   const input = document.getElementById('capacita');
   if (document.getElementById('modelloAuto').value === "spring") {
-    input.value = "26.8"; input.readOnly = true;
+    input.value = "26.8";
+    input.readOnly = true;
   } else {
-    input.value = ""; input.readOnly = false; input.focus();
+    input.value = "";
+    input.readOnly = false;
+    input.focus();
   }
 }
 
-// CURVA DEFINITIVA DOPO TEST NOTTURNO 40% → 85% in ~6 ore (temp scesa a ~2-3°C)
+// CURVA 02-12-2025 (test notturno 40→85% in ~6 ore con discesa sotto 3°C)
 function getTempFactor(temp, potenza = null) {
   temp = parseFloat(temp);
   const isSlowCharge = potenza !== null && potenza <= 3.8;
@@ -46,7 +49,7 @@ function getTempFactor(temp, potenza = null) {
 }
 
 function calcolaAutomatico() { calcola(true); }
-function calcolaManuale() { calcola(false); }
+function calcolaManuale()   { calcola(false); }
 
 function calcola(isAuto) {
   let perc = 0, tempo100min = 0, cap = 0, kw = 0;
@@ -59,7 +62,7 @@ function calcola(isAuto) {
   } else {
     perc = parseFloat(document.getElementById('percAttuale').value) || 0;
     cap = parseFloat(document.getElementById('capacita').value) || 0;
-    kw = parseFloat(document.getElementById('potenza').value) || 0;
+    kw  = parseFloat(document.getElementById('potenza').value) || 0;
   }
 
   const usaTemp = document.getElementById('usaTemp').checked;
@@ -84,19 +87,20 @@ function calcola(isAuto) {
 }
 
 function mostraRisultato(minutiTotali, impatto) {
-  const h = Math.floor(minutiTotali/60);
-  const m = Math.round(minutiTotali%60);
+  const h = Math.floor(minutiTotali / 60);
+  const m = Math.round(minutiTotali % 60);
   const testo = h > 0 ? `${h}h ${m}min` : `${m} minuti`;
 
   const ora = new Date();
   ora.setMinutes(ora.getMinutes() + Math.round(minutiTotali));
-  const orario = ora.toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'});
+  const orario = ora.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
 
   document.getElementById('tempoRimanente').textContent = testo;
   document.getElementById('orarioFinale').textContent = orario;
+
   const el = document.getElementById('impattoTemp');
   el.textContent = impatto;
   el.style.display = impatto ? 'block' : 'none';
 
   document.getElementById('risultato').classList.add('show');
-}
+                     }
