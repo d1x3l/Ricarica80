@@ -1,6 +1,3 @@
-// calcolo.js - Versione definitiva 02-12-2025
-// Calibrata sui test reali Dacia Spring 3,7 kW + freddo notturno
-
 export function getTempFactor(temp, potenza = null) {
   temp = parseFloat(temp);
   const isSlowCharge = potenza !== null && potenza <= 3.8;
@@ -8,17 +5,16 @@ export function getTempFactor(temp, potenza = null) {
   if (temp >= 15) return 1.0;
 
   if (isSlowCharge) {
-    // CURVA FINALE dopo tuo test notte 40% → 85% in ~6h a ~3°C
+    // CURVA DEFINITIVA – DICEMBRE 2025 – test reali Spring 3,7 kW
     if (temp >= 10) return 1.35;
     if (temp >= 7)  return 1.70;
-    if (temp >= 5)  return 2.00;
+    if (temp >= 5)  return 2.00;   // 5–6 °C → esattamente ×2,00
     if (temp >= 3)  return 2.18;
     if (temp >= 1)  return 2.35;
     if (temp >= -2) return 2.55;
     if (temp >= -5) return 2.80;
     return 3.0 + (temp * -0.08);
   } else {
-    // Ricarica veloce o modalità automatica
     if (temp >= 10) return 1.15;
     if (temp >= 7)  return 1.35;
     if (temp >= 3)  return 1.62;
