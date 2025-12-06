@@ -58,7 +58,7 @@
 
     <div class="temp-section">
       <label><input type="checkbox" id="usaTemp" onchange="toggleTemp()"/> Considera temperatura ambiente</label>
-      <div class="disclaimer">Curva calibrata sui tuoi test reali (dicembre 2025)</div>
+      <div class="disclaimer">Curva calibrata sui tuoi test reali – dicembre 2025</div>
       <select id="temperatura">
         <option value="40">40°C – Molto caldo</option>
         <option value="35">35°C – Caldo intenso</option>
@@ -76,11 +76,11 @@
 
     <div id="auto" class="content active">
       <label>Batteria attuale (%)</label>
-      <input type="number" id="percAttualeAuto" min="1" max="99" value="40"/>
+      <input type="number" id="percAttualeAuto" min="1" max="99" value="35"/>
       <label>Tempo stimato auto per 100%</label>
       <div class="time-input">
-        <input type="number" id="ore100" min="0" max="48" value="7" placeholder="Ore">
-        <input type="number" id="min100" min="0" max="59" value="13" placeholder="Min">
+        <input type="number" id="ore100" min="0" max="48" value="8" placeholder="Ore">
+        <input type="number" id="min100" min="0" max="59" value="38" placeholder="Min">
       </div>
       <button onclick="calcolaAutomatico()">Calcola 80%</button>
     </div>
@@ -94,7 +94,7 @@
       <label>Capacità batteria (kWh)</label>
       <input type="number" step="0.1" id="capacita" value="26.8" readonly style="background:#333"/>
       <label>Batteria attuale (%)</label>
-      <input type="number" id="percAttuale" min="1" max="99" value="40"/>
+      <input type="number" id="percAttuale" min="1" max="99" value="35"/>
       <label>Potenza ricarica (kW)</label>
       <input type="number" step="0.1" id="potenza" value="3.7"/>
       <button onclick="calcolaManuale()">Calcola 80%</button>
@@ -107,11 +107,52 @@
     </div>
   </div>
 
-  <!-- LOGICA SEPARATA -->
-  <script type="module">
-    import { calcolaTempo80, formattaTempo, calcolaOrario } from './calcolo.js';
+  <!-- TUTTA LA LOGICA IN UN UNICO SCRIPT (funziona subito su GitHub Pages) -->
+  <script>
+    // CURVA DEFINITIVA – DICEMBRE 2025 – calibrata sui tuoi test reali
+    function getTempFactor(temp, potenza = null) {
+      temp = parseFloat(temp);
+      const isSlowCharge = potenza !== null && potenza <= 3.8;
+      if (temp >= 15) return 1.0;
+      if (isSlowCharge) {
+        if (temp >= 10) return 1.35;
+        if (temp >= 7)  return 1.70;
+        if (temp >= 5)  return 2.00;
+        if (temp >= 3)  return 2.18;
+        if (temp >= 1)  return 2.35;
+        if (temp >= -2) return 2.55;
+        if (temp >= -5) return 2.80;
+        return 3.0 + (temp * -0.08);
+      } else {
+        if (temp >= 10) return 1.15;
+        if (temp >= 7)  return 1.35;
+        if (temp >= 3)  return 1.62;
+        if (temp >= 0)  return 1.85;
+        return 2.1 + (temp * -0.05);
+      }
+    }
 
-    // Tab
+    function calcolaTempo80(percAttuale, tempo100min = 0, capacita = 0, potenza = 0, temp = 25, isAuto = true) {
+      const tempoBaseMin = isAuto
+        ? (80 - percAttuale) / (100 - percAttuale) * tempo100min
+        : ((80 - percAttuale) / 100 * capacita / potenza) * 60;
+      const fattore = temp < 15 ? getTempFactor(temp, isAuto ? null : potenza) : 1;
+      return tempoBaseMin * fattore;
+    }
+
+    function formattaTempo(minutiTotali) {
+      const h = Math.floor(minutiTotali / 60);
+      const m = Math.round(minutiTotali % 60);
+      return h > 0 ? `${h}h ${m}min` : `${m} minuti`;
+    }
+
+    function calcolaOrario(minutiDaOra) {
+      const ora = new Date();
+      ora.setMinutes(ora.getMinutes() + Math.round(minutiDaOra));
+      return ora.toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'});
+    }
+
+    // INTERFACCIA
     document.querySelectorAll('.tab').forEach(tab => {
       tab.onclick = () => {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -141,7 +182,6 @@
 
     function calcola(isAuto) {
       let perc, tempo100min = 0, cap = 0, kw = 0;
-
       if (isAuto) {
         perc = parseFloat(document.getElementById('percAttualeAuto').value) || 0;
         const ore = parseInt(document.getElementById('ore100').value) || 0;
@@ -162,7 +202,6 @@
       }
 
       const minuti = calcolaTempo80(perc, tempo100min, cap, kw, temp, isAuto);
-
       const testoTempo = formattaTempo(minuti);
       const orario = calcolaOrario(minuti);
 
