@@ -19,34 +19,87 @@
 
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
-    :root {--primary:#00aaff;--dark:#0f0f15;--gray:#222;--light-gray:#bbb;--bg:linear-gradient(135deg,#0f0f15,#1a1a1f);}
+    :root {
+      --primary:#00aaff;
+      --dark:#0f0f15;
+      --gray:#222;
+      --light-gray:#bbb;
+      --bg:linear-gradient(135deg,#0f0f15,#1a1a1f);
+      --spacing:24px;
+    }
     * {box-sizing:border-box;margin:0;padding:0;}
     body {font-family:'Roboto',sans-serif;background:var(--bg);color:white;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px;}
-    .container {background:var(--dark);padding:30px 25px;border-radius:25px;box-shadow:0 12px 30px rgba(0,0,0,0.6);max-width:480px;width:100%;display:flex;flex-direction:column;gap:20px;}
-    h1 {text-align:center;font-size:30px;color:var(--primary);font-weight:700;}
-    .subtitle {text-align:center;color:var(--light-gray);font-size:14px;line-height:1.4;margin-bottom:15px;}
-    label {font-weight:500;margin-bottom:5px;font-size:14px;}
-    input, select {width:100%;padding:12px 14px;border-radius:12px;border:none;background:var(--gray);color:white;font-size:15px;}
-    .temp-section {background:rgba(0,170,255,0.1);padding:15px;border-radius:10px;}
-    .temp-section input[type="checkbox"] {width:auto;margin-right:10px;vertical-align:middle;}
-    button {margin-top:25px;padding:15px;background:var(--primary);color:white;border:none;border-radius:10px;font-size:18px;font-weight:bold;cursor:pointer;transition:.3s;}
-    button:hover {background:#0088cc;}
-    .result {background:rgba(0,170,255,0.1);border-radius:16px;padding:20px;text-align:center;display:none;flex-direction:column;gap:10px;}
+    .container {background:var(--dark);padding:36px 28px;border-radius:28px;box-shadow:0 15px 40px rgba(0,0,0,0.7);max-width:480px;width:100%;display:flex;flex-direction:column;gap:var(--spacing);}
+    h1 {text-align:center;font-size:32px;color:var(--primary);font-weight:700;margin-bottom:8px;}
+    .subtitle {text-align:center;color:var(--light-gray);font-size:15px;line-height:1.5;padding:0 20px;}
+
+    .temp-section {
+      background:rgba(0,170,255,0.12);
+      padding:20px;
+      border-radius:16px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+    .temp-section label {font-weight:500;font-size:15px;}
+    .temp-section input[type="checkbox"] {width:auto;margin-right:12px;vertical-align:middle;transform:scale(1.3);}
+
+    label {font-weight:500;font-size:15px;margin-bottom:8px;display:block;}
+    input, select {
+      width:100%;
+      padding:16px 18px;
+      border-radius:14px;
+      border:none;
+      background:var(--gray);
+      color:white;
+      font-size:16px;
+      margin-bottom:var(--spacing);
+    }
+    select {appearance:none;background-image:url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");background-repeat:no-repeat;background-position:right 16px center;background-size:12px;}
+
+    button {
+      margin-top:10px;
+      padding:18px;
+      background:var(--primary);
+      color:white;
+      border:none;
+      border-radius:16px;
+      font-size:19px;
+      font-weight:700;
+      cursor:pointer;
+      transition:0.3s;
+      box-shadow:0 6px 20px rgba(0,170,255,0.3);
+    }
+    button:hover {background:#0088cc;transform:translateY(-2px);}
+
+    .result {
+      background:rgba(0,170,255,0.15);
+      border-radius:20px;
+      padding:28px 20px;
+      text-align:center;
+      display:none;
+      flex-direction:column;
+      gap:16px;
+      margin-top:10px;
+      border:1px solid rgba(0,170,255,0.2);
+    }
     .result.show {display:flex;}
-    .time {font-size:32px;font-weight:700;color:var(--primary);}
-    .impact {font-size:14px;color:#ffaa00;}
-    .disclaimer {font-size:12px;color:var(--light-gray);line-height:1.4;margin-top:10px;text-align:center;}
-    #temperatura {display:none;margin-top:10px;}
+    .time {font-size:38px;font-weight:700;color:var(--primary);letter-spacing:-1px;}
+    .impact {font-size:15px;color:#ffaa00;font-weight:500;}
+
+    #temperatura {display:none;margin-top:8px;}
   </style>
 </head>
 <body>
   <div class="container">
     <h1>Ricarica 80%</h1>
-    <div class="subtitle">Solo modalità manuale – calibrata sulla tua Dacia Spring</div>
+    <div class="subtitle">Calcolatore preciso per Dacia Spring<br>Fermati all’80 % e proteggi la batteria</div>
 
     <div class="temp-section">
-      <label><input type="checkbox" id="usaTemp" onchange="toggleTemp()"/> Considera temperatura ambiente</label>
-      <div class="disclaimer">Curva aggiornata a dicembre 2025 con i tuoi test reali</div>
+      <label>
+        <input type="checkbox" id="usaTemp" onchange="toggleTemp()"/>
+        Considera temperatura ambiente (fondamentale in inverno)
+      </label>
       <select id="temperatura">
         <option value="40">40°C – Molto caldo</option>
         <option value="35">35°C – Caldo intenso</option>
@@ -70,7 +123,7 @@
       </select>
 
       <label>Capacità batteria (kWh)</label>
-      <input type="number" step="0.1" id="capacita" value="26.8" readonly style="background:#333"/>
+      <input type="number" step="0.1" id="capacita" value="26.8" readonly/>
 
       <label>Batteria attuale (%)</label>
       <input type="number" id="percAttuale" min="1" max="99" value="35"/>
@@ -83,7 +136,7 @@
 
     <div id="risultato" class="result">
       <div>Mancano <span id="tempoRimanente" class="time">--</span></div>
-      <div>Arrivo all'80% alle <span id="orarioFinale" class="time">--</span></div>
+      <div>Arrivo all’80% alle <span id="orarioFinale" class="time">--</span></div>
       <div id="impattoTemp" class="impact"></div>
     </div>
   </div>
