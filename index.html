@@ -20,7 +20,6 @@
   <style>
     /* ── THEME TOKENS ── */
     :root {
-      /* Spring (arancio) — default */
       --c0:  #12090a;
       --c1:  #1c0f0a;
       --c2:  #251510;
@@ -38,7 +37,6 @@
       --arc2: #ff5e1a;
     }
     :root.grey {
-      /* Altro modello (grigio neutro) */
       --c0:  #111113;
       --c1:  #1a1a1e;
       --c2:  #222228;
@@ -76,16 +74,6 @@
         linear-gradient(90deg, var(--grd-a) 1px, transparent 1px);
       background-size: 44px 44px;
       pointer-events: none; z-index: 0;
-      transition: background 0.5s;
-    }
-    body::after {
-      content: '';
-      position: fixed;
-      top: -200px; left: 50%; transform: translateX(-50%);
-      width: 700px; height: 500px;
-      background: radial-gradient(ellipse, var(--orb) 0%, transparent 65%);
-      pointer-events: none; z-index: 0;
-      transition: background 0.5s;
     }
 
     .app {
@@ -93,17 +81,21 @@
       width: 100%; max-width: 430px;
       display: flex; flex-direction: column; gap: 14px;
     }
-    .app > * { animation: up 0.55s ease both; }
-    .app > *:nth-child(1) { animation-delay: 0.00s; }
-    .app > *:nth-child(2) { animation-delay: 0.07s; }
-    .app > *:nth-child(3) { animation-delay: 0.13s; }
-    .app > *:nth-child(4) { animation-delay: 0.19s; }
-    .app > *:nth-child(5) { animation-delay: 0.25s; }
-    .app > *:nth-child(6) { animation-delay: 0.31s; }
+
+    /* MODIFICA: Rimosso opacity:0 che bloccava il caricamento su alcuni browser */
+    .app > * { 
+      animation: up 0.6s ease-out both; 
+    }
+    .app > *:nth-child(1) { animation-delay: 0.05s; }
+    .app > *:nth-child(2) { animation-delay: 0.12s; }
+    .app > *:nth-child(3) { animation-delay: 0.18s; }
+    .app > *:nth-child(4) { animation-delay: 0.24s; }
+    .app > *:nth-child(5) { animation-delay: 0.30s; }
+
     @keyframes up {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
+      from { opacity: 0; transform: translateY(15px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
 
     /* ── HEADER ── */
     .header { text-align: center; padding: 4px 0 2px; }
@@ -115,11 +107,6 @@
       font-size: 10.5px; font-weight: 600;
       letter-spacing: 0.09em; text-transform: uppercase;
       color: var(--ac2); margin-bottom: 12px;
-      transition: color 0.4s, border-color 0.4s, background 0.4s;
-    }
-    :root.grey .badge {
-      background: rgba(150,160,190,0.1);
-      border-color: rgba(150,160,190,0.25);
     }
     h1 {
       font-family: 'Syne', sans-serif;
@@ -128,9 +115,7 @@
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       background-clip: text; margin-bottom: 7px;
     }
-    :root.grey h1 { background: linear-gradient(140deg, #e8eaf0 20%, #6a7890 100%);
-      -webkit-background-clip: text; background-clip: text; }
-    .subtitle { color: var(--mut); font-size: 13.5px; line-height: 1.65; transition: color 0.4s; }
+    .subtitle { color: var(--mut); font-size: 13.5px; line-height: 1.65; }
 
     /* ── CAR CARD ── */
     .car-card {
@@ -139,45 +124,31 @@
       border-radius: 26px; overflow: hidden;
       position: relative; min-height: 190px;
       display: flex; align-items: center; justify-content: center;
-      transition: background 0.5s, border-color 0.5s;
-    }
-    .car-card::before {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0; height: 1px;
-      background: linear-gradient(90deg, transparent, var(--acc), transparent);
-      opacity: 0.5; z-index: 2;
-      transition: background 0.5s;
-    }
-    .car-floor {
-      position: absolute; bottom: 0; left: 0; right: 0; height: 50px;
-      background: linear-gradient(to top, var(--glow-floor), transparent);
-      z-index: 1; transition: background 0.5s;
     }
     .car-glow {
       position: absolute; bottom: -30px; left: 50%; transform: translateX(-50%);
       width: 300px; height: 80px;
       background: radial-gradient(ellipse, var(--glow-car) 0%, transparent 70%);
-      z-index: 1; transition: background 0.5s;
+      z-index: 1;
+    }
+    .car-floor {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 50px;
+      background: linear-gradient(to top, var(--glow-floor), transparent);
+      z-index: 1;
     }
     .car-scene {
       position: relative; z-index: 3;
       width: 100%; display: flex; align-items: flex-end; justify-content: center;
       padding: 20px 10px 18px;
     }
-    #carSpring {
-      filter: drop-shadow(0 10px 24px var(--glow-car)) drop-shadow(0 2px 6px rgba(0,0,0,0.5));
-      animation: carFloat 3.5s ease-in-out infinite;
-    }
-    #carGeneric {
-      filter: drop-shadow(0 8px 18px rgba(100,110,150,0.2)) drop-shadow(0 2px 6px rgba(0,0,0,0.4));
-      animation: carFloat 3.5s ease-in-out infinite;
-      display: none;
+    #carSpring, #carGeneric {
+       animation: carFloat 3.5s ease-in-out infinite;
     }
     @keyframes carFloat {
       0%,100% { transform: translateY(0px); }
       50%      { transform: translateY(-5px); }
     }
-    .sparks { position: absolute; inset: 0; pointer-events: none; z-index: 4; overflow: hidden; }
+    .sparks { position: absolute; inset: 0; pointer-events: none; z-index: 4; }
     .spark {
       position: absolute; width: 3px; height: 3px; border-radius: 50%;
       background: var(--ac2);
@@ -192,9 +163,8 @@
     .car-label {
       position: absolute; bottom: 10px; left: 16px;
       font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
-      color: rgba(255,210,180,0.3); z-index: 5; transition: color 0.4s;
+      color: rgba(255,210,180,0.3); z-index: 5;
     }
-    :root.grey .car-label { color: rgba(170,180,210,0.3); }
     .car-model-name {
       position: absolute; top: 14px; right: 16px;
       font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 800;
@@ -207,46 +177,33 @@
       border-radius: 26px; padding: 26px 20px 20px;
       display: flex; flex-direction: column; align-items: center;
       position: relative; overflow: hidden;
-      transition: background 0.5s, border-color 0.5s;
-    }
-    .gauge-card::after {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0; height: 1px;
-      background: linear-gradient(90deg, transparent, var(--acc), transparent);
-      opacity: 0.45; transition: background 0.5s;
     }
     .arc-svg { width: 230px; height: 126px; overflow: visible; }
     .arc-track { fill: none; stroke: rgba(255,255,255,0.05); stroke-width: 14; stroke-linecap: round; }
     .arc-fill  { fill: none; stroke: url(#arcGrad); stroke-width: 14; stroke-linecap: round; }
-    .arc-tick  { fill: none; stroke: var(--amb); stroke-width: 4; stroke-linecap: round; transition: stroke 0.4s; }
+    .arc-tick  { fill: none; stroke: var(--amb); stroke-width: 4; stroke-linecap: round; }
     .gauge-center { margin-top: -8px; text-align: center; }
     .gauge-num {
       font-family: 'Syne', sans-serif; font-size: 54px; font-weight: 800; line-height: 1;
-      color: var(--acc); text-shadow: 0 0 28px rgba(255,94,26,0.35); transition: color 0.4s, text-shadow 0.4s;
+      color: var(--acc); text-shadow: 0 0 28px rgba(255,94,26,0.35);
     }
-    :root.grey .gauge-num { text-shadow: 0 0 28px rgba(100,120,160,0.3); }
-    .gauge-label-sub { font-size: 12px; color: var(--mut); margin-top: 4px; transition: color 0.4s; }
+    .gauge-label-sub { font-size: 12px; color: var(--mut); margin-top: 4px; }
     .gauge-target-note {
       margin-top: 8px;
       display: inline-flex; align-items: center; gap: 6px;
       background: rgba(255,184,48,0.09); border: 1px solid rgba(255,184,48,0.2);
       border-radius: 100px; padding: 4px 12px;
       font-size: 11px; font-weight: 600; color: var(--amb);
-      transition: all 0.4s;
-    }
-    :root.grey .gauge-target-note {
-      background: rgba(140,158,190,0.09); border-color: rgba(140,158,190,0.2);
     }
 
     /* ── FORM ── */
     .form-card {
       background: var(--c1); border: 1px solid var(--bdr);
       border-radius: 26px; padding: 22px 20px 20px;
-      transition: background 0.5s, border-color 0.5s;
     }
     .section-label {
       font-size: 10.5px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
-      color: var(--mut); margin-bottom: 16px; transition: color 0.4s;
+      color: var(--mut); margin-bottom: 16px;
     }
     .sel-wrap { position: relative; margin-bottom: 18px; }
     .sel-wrap select {
@@ -255,28 +212,21 @@
       border-radius: 14px; color: var(--txt);
       font-family: 'DM Sans', sans-serif; font-size: 14.5px;
       padding: 13px 42px 13px 16px;
-      cursor: pointer; outline: none; transition: border-color 0.2s;
+      cursor: pointer; outline: none;
     }
-    .sel-wrap select:focus { border-color: var(--acc); }
     .sel-wrap::after {
       content: '▾'; position: absolute; right: 15px; top: 50%;
-      transform: translateY(-50%); color: var(--mut); pointer-events: none; font-size: 12px;
+      transform: translateY(-50%); color: var(--mut); pointer-events: none;
     }
     .cap-row { display: none; align-items: center; gap: 10px; margin-bottom: 18px; }
     .cap-row.on { display: flex; }
     .cap-row input {
       flex: 1; background: rgba(255,255,255,0.04); border: 1px solid var(--bdr);
-      border-radius: 14px; color: var(--txt);
-      font-family: 'DM Sans', sans-serif; font-size: 15px;
-      padding: 13px 16px; outline: none; transition: border-color 0.2s;
+      border-radius: 14px; color: var(--txt); padding: 13px 16px; outline: none;
     }
-    .cap-row input:focus { border-color: var(--acc); }
-    .cap-row span { font-size: 13px; color: var(--mut); }
-
     .field { margin-bottom: 22px; }
-    .field:last-child { margin-bottom: 0; }
     .field-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
-    .field-lbl { font-size: 13px; font-weight: 500; color: var(--mut); transition: color 0.4s; }
+    .field-lbl { font-size: 13px; font-weight: 500; color: var(--mut); }
     .field-val { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; color: var(--txt); }
     .field-val span { font-size: 14px; font-weight: 400; color: var(--mut); margin-left: 2px; }
 
@@ -286,43 +236,16 @@
     }
     input[type="range"]::-webkit-slider-thumb {
       -webkit-appearance: none; width: 24px; height: 24px; border-radius: 50%;
-      background: var(--acc); box-shadow: 0 0 14px color-mix(in srgb, var(--acc) 60%, transparent);
-      cursor: pointer; transition: transform 0.12s;
-    }
-    input[type="range"]:active::-webkit-slider-thumb { transform: scale(1.22); }
-    input[type="range"]::-moz-range-thumb {
-      width: 24px; height: 24px; border-radius: 50%;
-      background: var(--acc); border: none; cursor: pointer;
-    }
-    #percSlider {
-      background: linear-gradient(to right, var(--ac2) var(--fp,43%), rgba(255,255,255,0.07) var(--fp,43%));
-    }
-    #kwSlider {
-      background: linear-gradient(to right, var(--acc) var(--fk,13%), rgba(255,255,255,0.07) var(--fk,13%));
+      background: var(--acc); box-shadow: 0 0 14px rgba(255,94,26,0.4);
     }
 
-    /* power toggle */
-    .power-toggle {
-      display: flex; align-items: center; gap: 8px;
-      margin-bottom: 16px; cursor: pointer; width: fit-content;
-    }
+    .power-toggle { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; cursor: pointer; width: fit-content; }
     .power-toggle input { display: none; }
-    .toggle-pill {
-      width: 36px; height: 20px; border-radius: 100px;
-      background: rgba(255,255,255,0.1); border: 1px solid var(--bdr);
-      position: relative; transition: background 0.25s;
-      flex-shrink: 0;
-    }
-    .toggle-pill::after {
-      content: ''; position: absolute;
-      width: 14px; height: 14px; border-radius: 50%;
-      background: var(--mut); top: 2px; left: 2px;
-      transition: transform 0.22s, background 0.22s;
-    }
+    .toggle-pill { width: 36px; height: 20px; border-radius: 100px; background: rgba(255,255,255,0.1); border: 1px solid var(--bdr); position: relative; }
+    .toggle-pill::after { content: ''; position: absolute; width: 14px; height: 14px; border-radius: 50%; background: var(--mut); top: 2px; left: 2px; transition: 0.2s; }
     .power-toggle input:checked + .toggle-pill { background: rgba(255,94,26,0.25); }
-    :root.grey .power-toggle input:checked + .toggle-pill { background: rgba(100,120,160,0.25); }
     .power-toggle input:checked + .toggle-pill::after { transform: translateX(16px); background: var(--acc); }
-    .toggle-label { font-size: 12.5px; color: var(--mut); font-weight: 500; transition: color 0.4s; }
+    .toggle-label { font-size: 12.5px; color: var(--mut); font-weight: 500; }
 
     .kw-field { display: none; }
     .kw-field.on { display: block; }
@@ -331,146 +254,240 @@
     .cta {
       width: 100%; padding: 19px;
       background: linear-gradient(130deg, var(--acc) 0%, var(--ac2) 100%);
-      color: #fff;
-      font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 800; letter-spacing: 0.02em;
+      color: #fff; font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 800;
       border: none; border-radius: 20px; cursor: pointer;
-      box-shadow: 0 4px 28px color-mix(in srgb, var(--acc) 45%, transparent);
-      transition: transform 0.16s, box-shadow 0.16s, filter 0.16s, background 0.4s;
-      text-shadow: 0 1px 3px rgba(0,0,0,0.15);
+      box-shadow: 0 4px 28px rgba(255,94,26,0.3); margin-top: 10px;
     }
-    .cta:hover  { transform: translateY(-2px); filter: brightness(1.08); }
-    .cta:active { transform: scale(0.97); filter: brightness(0.9); }
 
     /* ── RESULT ── */
     .result {
-      background: var(--c1); border: 1px solid color-mix(in srgb, var(--acc) 30%, transparent);
+      background: var(--c1); border: 1px solid rgba(255,94,26,0.2);
       border-radius: 26px; padding: 0 20px;
-      display: none; flex-direction: column;
-      position: relative; overflow: hidden;
-      transition: background 0.5s, border-color 0.5s;
+      display: none; flex-direction: column; position: relative; overflow: hidden;
     }
     .result.show { display: flex; animation: pop 0.45s cubic-bezier(.34,1.56,.64,1) both; }
     @keyframes pop {
-      from { opacity: 0; transform: scale(0.94) translateY(12px); }
-      to   { opacity: 1; transform: scale(1) translateY(0); }
+      from { opacity: 0; transform: scale(0.94); }
+      to   { opacity: 1; transform: scale(1); }
     }
-    .result::before {
-      content: ''; position: absolute; inset: 0;
-      background: radial-gradient(ellipse at 50% -20%, color-mix(in srgb, var(--acc) 10%, transparent), transparent 65%);
-      pointer-events: none;
-    }
-    .res-row {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 17px 0; border-bottom: 1px solid var(--bdr);
-    }
+    .res-row { display: flex; justify-content: space-between; align-items: center; padding: 17px 0; border-bottom: 1px solid var(--bdr); }
     .res-row:last-child { border-bottom: none; }
-    .res-lbl {
-      display: flex; align-items: center; gap: 8px;
-      font-size: 11.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
-      color: var(--mut); transition: color 0.4s;
-    }
-    .dot {
-      width: 8px; height: 8px; border-radius: 50%; background: var(--acc);
-      animation: blink 1.5s ease-in-out infinite; transition: background 0.4s;
-    }
-    @keyframes blink {
-      0%,100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--acc) 80%, transparent); }
-      50%      { box-shadow: 0 0 0 5px transparent; }
-    }
-    .res-val {
-      font-family: 'Syne', sans-serif; font-size: 30px; font-weight: 800; color: var(--acc);
-      text-shadow: 0 0 20px color-mix(in srgb, var(--acc) 35%, transparent);
-      transition: color 0.4s;
-    }
-    .res-val.neutral { color: var(--txt); text-shadow: none; }
+    .res-lbl { font-size: 11.5px; font-weight: 600; text-transform: uppercase; color: var(--mut); display: flex; align-items: center; gap: 8px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--acc); animation: blink 1.5s infinite; }
+    @keyframes blink { 50% { opacity: 0.3; } }
+    .res-val { font-family: 'Syne', sans-serif; font-size: 30px; font-weight: 800; color: var(--acc); }
+    .res-val.neutral { color: var(--txt); }
     .res-val.small { font-size: 22px; color: var(--mut); }
-    .res-note {
-      font-size: 11px; color: var(--mut); text-align: center;
-      padding: 10px 4px 18px; line-height: 1.6; display: none; transition: color 0.4s;
-    }
+    .res-note { font-size: 11px; color: var(--mut); text-align: center; padding: 10px 4px 18px; display: none; }
     .res-note.on { display: block; }
 
-    .foot {
-      text-align: center; font-size: 10.5px; color: rgba(200,190,180,0.18);
-      padding-top: 2px; transition: color 0.4s;
-    }
-    :root.grey .foot { color: rgba(160,170,200,0.18); }
+    .foot { text-align: center; font-size: 10.5px; color: rgba(200,190,180,0.18); padding-top: 10px; }
 
-    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-inner-spin-button, 
     input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
-    input[type=number] { -moz-appearance: textfield; }
   </style>
 </head>
 <body>
 <div class="app">
 
-  <!-- HEADER -->
   <header class="header">
     <div class="badge">⚡ EV Charger</div>
     <h1>Ricarica<br>all'80%</h1>
     <p class="subtitle">Proteggi la batteria. Calcola l'orario esatto<br>in cui staccare la spina.</p>
   </header>
 
-  <!-- CAR SHOWCASE -->
   <div class="car-card">
     <div class="car-glow"></div>
     <div class="car-floor"></div>
     <div class="sparks" id="sparks"></div>
-
     <div class="car-scene">
-
-      <!-- ══ DACIA SPRING SVG ══ -->
-      <svg id="carSpring" xmlns="http://www.w3.org/2000/svg"
-           viewBox="0 0 520 215" width="360" height="148">
+      <svg id="carSpring" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 215" width="360" height="148">
         <defs>
-          <linearGradient id="bodyTop" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%"   stop-color="#ff8040"/>
-            <stop offset="55%"  stop-color="#ff4e10"/>
-            <stop offset="100%" stop-color="#c83400"/>
-          </linearGradient>
-          <linearGradient id="bodyRight" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%"   stop-color="rgba(0,0,0,0)" />
-            <stop offset="100%" stop-color="rgba(0,0,0,0.28)"/>
-          </linearGradient>
-          <linearGradient id="roofG" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%"   stop-color="#ff9050"/>
-            <stop offset="100%" stop-color="#e04000"/>
-          </linearGradient>
-          <linearGradient id="windG" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%"   stop-color="#d8eeff" stop-opacity="0.52"/>
-            <stop offset="100%" stop-color="#90c0e8" stop-opacity="0.22"/>
-          </linearGradient>
-          <linearGradient id="swinG" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%"   stop-color="#b8d8f8" stop-opacity="0.48"/>
-            <stop offset="100%" stop-color="#80b0d8" stop-opacity="0.18"/>
-          </linearGradient>
-          <radialGradient id="whlG" cx="40%" cy="38%" r="55%">
-            <stop offset="0%"   stop-color="#555"/>
-            <stop offset="100%" stop-color="#111"/>
-          </radialGradient>
-          <filter id="ds">
-            <feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#000" flood-opacity="0.35"/>
-          </filter>
+          <linearGradient id="bodyTop" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#ff8040"/><stop offset="55%" stop-color="#ff4e10"/><stop offset="100%" stop-color="#c83400"/></linearGradient>
+          <linearGradient id="bodyRight" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="rgba(0,0,0,0)"/><stop offset="100%" stop-color="rgba(0,0,0,0.28)"/></linearGradient>
+          <linearGradient id="roofG" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#ff9050"/><stop offset="100%" stop-color="#e04000"/></linearGradient>
+          <linearGradient id="windG" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#d8eeff" stop-opacity="0.52"/><stop offset="100%" stop-color="#90c0e8" stop-opacity="0.22"/></linearGradient>
+          <linearGradient id="swinG" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#b8d8f8" stop-opacity="0.48"/><stop offset="100%" stop-color="#80b0d8" stop-opacity="0.18"/></linearGradient>
+          <radialGradient id="whlG" cx="40%" cy="38%" r="55%"><stop offset="0%" stop-color="#555"/><stop offset="100%" stop-color="#111"/></radialGradient>
         </defs>
-
-        <!-- ground shadow -->
         <ellipse cx="258" cy="207" rx="188" ry="10" fill="rgba(0,0,0,0.32)"/>
-
-        <!-- ── BODY ── -->
-        <!-- Main side panel -->
-        <path d="M 72 152 L 92 118 L 400 118 L 422 152 Z"
-              fill="url(#bodyTop)" filter="url(#ds)"/>
-        <!-- Roof + pillars -->
-        <path d="M 148 118 L 172 72 L 198 56 L 328 56 L 358 72 L 382 118 Z"
-              fill="url(#roofG)"/>
-        <!-- Right-side depth shading -->
-        <path d="M 72 152 L 92 118 L 400 118 L 422 152 Z"
-              fill="url(#bodyRight)" opacity="0.45"/>
-        <!-- Hood slope -->
+        <path d="M 72 152 L 92 118 L 400 118 L 422 152 Z" fill="url(#bodyTop)"/>
+        <path d="M 148 118 L 172 72 L 198 56 L 328 56 L 358 72 L 382 118 Z" fill="url(#roofG)"/>
+        <path d="M 72 152 L 92 118 L 400 118 L 422 152 Z" fill="url(#bodyRight)" opacity="0.45"/>
         <path d="M 72 152 L 92 118 L 152 118 L 145 148 Z" fill="#d03800"/>
-        <!-- Boot slope -->
-        <path d="M 400 118 L 422 152 L 410 152 L 392 128 Z" fill="#bb3200"/>
-
-        <!-- Lower cladding / skirt -->
         <rect x="76" y="148" width="342" height="11" rx="2.5" fill="#2c2c2c"/>
-       
+        <path d="M 54 164 Q 60 152 76 152 L 148 152 L 145 164 Z" fill="#252525"/>
+        <path d="M 422 152 Q 438 152 444 164 L 376 164 L 374 152 Z" fill="#252525"/>
+        <rect x="60" y="122" width="76" height="7" rx="3.5" fill="#f8faff" opacity="0.95"/>
+        <rect x="394" y="122" width="32" height="7" rx="3.5" fill="#e81800" opacity="0.88"/>
+        <path d="M 150 118 L 174 74 L 198 60 L 232 60 L 232 118 Z" fill="url(#windG)"/>
+        <path d="M 234 60 L 328 60 L 354 70 L 356 118 L 234 118 Z" fill="url(#swinG)"/>
+        <rect x="287" y="60" width="5" height="58" fill="rgba(10,5,0,0.55)"/>
+        <circle cx="138" cy="174" r="33" fill="#161616"/><circle cx="138" cy="174" r="29" fill="url(#whlG)"/>
+        <circle cx="372" cy="174" r="33" fill="#161616"/><circle cx="372" cy="174" r="29" fill="url(#whlG)"/>
+        <circle cx="416" cy="138" r="5" fill="#ff5e1a"><animate attributeName="opacity" values="0.4;1;0.4" dur="1.9s" repeatCount="indefinite"/></circle>
+      </svg>
+
+      <svg id="carGeneric" style="display:none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 215" width="360" height="148">
+        <ellipse cx="258" cy="207" rx="185" ry="10" fill="rgba(80,90,120,0.12)"/>
+        <path d="M 62 163 L 72 143 L 92 116 L 152 116 L 170 70 L 196 54 L 328 54 L 358 70 L 384 116 L 418 116 L 436 143 L 448 163 L 117 163 Z" fill="rgba(124,140,170,0.2)" stroke="rgba(140,158,200,0.5)" stroke-width="1.5"/>
+      </svg>
+    </div>
+    <span class="car-label" id="carLabel">Dacia Spring Electric</span>
+    <span class="car-model-name" id="carModelName">26,8 kWh</span>
+  </div>
+
+  <div class="gauge-card">
+    <svg class="arc-svg" viewBox="0 0 230 126">
+      <defs>
+        <linearGradient id="arcGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#ffb830" id="grad0"/><stop offset="100%" stop-color="#ff5e1a" id="grad1"/>
+        </linearGradient>
+      </defs>
+      <path class="arc-track" id="arcTrack" d="M19.00 115.00 A96 96 0 0 1 211.00 115.00"/>
+      <path class="arc-fill" id="arcFill" d=""/>
+      <path class="arc-tick" id="arcTick" d=""/>
+    </svg>
+    <div class="gauge-center">
+      <div class="gauge-num" id="gaugeNum">35%</div>
+      <div class="gauge-label-sub">batteria attuale</div>
+      <div class="gauge-target-note">▸ obiettivo 80%</div>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div class="section-label">Configurazione</div>
+    <div class="sel-wrap">
+      <select id="modelloAuto" onchange="impostaCapacita()">
+        <option value="spring" selected>Dacia Spring Electric — 26,8 kWh</option>
+        <option value="altro">Altro modello (capacità manuale)</option>
+      </select>
+    </div>
+    <div class="cap-row" id="capRow">
+      <input type="number" step="0.1" id="capacita" placeholder="es. 40.0"/>
+      <span>kWh</span>
+    </div>
+    <div class="field">
+      <div class="field-top">
+        <span class="field-lbl">Batteria attuale</span>
+        <span class="field-val"><span id="percDisp">35</span><span>%</span></span>
+      </div>
+      <input type="range" id="percSlider" min="1" max="79" value="35" oninput="onPerc(this.value)"/>
+    </div>
+    <label class="power-toggle">
+      <input type="checkbox" id="kwToggle" onchange="toggleKw()"/>
+      <span class="toggle-pill"></span>
+      <span class="toggle-label">Modifica potenza di ricarica</span>
+    </label>
+    <div class="field kw-field" id="kwField">
+      <div class="field-top">
+        <span class="field-lbl">Potenza di ricarica</span>
+        <span class="field-val"><span id="kwDisp">3.7</span><span>kW</span></span>
+      </div>
+      <input type="range" id="kwSlider" min="1.0" max="22.0" step="0.1" value="3.7" oninput="onKw(this.value)"/>
+    </div>
+  </div>
+
+  <button class="cta" onclick="calcola()">⚡ Calcola tempo di ricarica</button>
+
+  <div class="result" id="risultato">
+    <div class="res-row"><span class="res-lbl">Tempo mancante</span><span class="res-val" id="resTempo">--</span></div>
+    <div class="res-row"><span class="res-lbl"><span class="dot"></span>Arrivo all'80%</span><span class="res-val neutral" id="resOrario">--</span></div>
+    <div class="res-row"><span class="res-lbl">Energia alla presa</span><span class="res-val small" id="resKwh">--</span></div>
+    <div class="res-row"><span class="res-lbl">Costo stimato 🏠</span><span class="res-val" id="resCosto" style="font-size:26px;">--</span></div>
+    <div class="res-note" id="resNote"></div>
+  </div>
+  <p class="foot">Calibrato su test reali · fattore ricarica AC applicato</p>
+</div>
+
+<script>
+  const FATTORE = 2.00;
+  const CAP_DEF = 26.8;
+  const KW_DEF  = 3.7;
+
+  /* ── SPARKS ── */
+  (function(){
+    const c = document.getElementById('sparks');
+    [{x:'36%',y:'22%'},{x:'60%',y:'28%'},{x:'74%',y:'18%'},{x:'26%',y:'32%'},{x:'50%',y:'14%'},{x:'82%',y:'26%'}]
+    .forEach(({x,y},i)=>{
+      const s = document.createElement('div');
+      s.className='spark';
+      s.style.cssText=`--x:${x};--y:${y};--d:${1.8+i*0.38}s;--delay:${i*0.33}s`;
+      c.appendChild(s);
+    });
+  })();
+
+  /* ── ARC ── */
+  const CX=115, CY=115, R=96;
+  function pt(deg){ const r=deg*Math.PI/180; return [CX+R*Math.cos(r), CY-R*Math.sin(r)]; }
+  function arcD(a,b){
+    const [sx,sy]=pt(a),[ex,ey]=pt(b);
+    return `M${sx.toFixed(2)} ${sy.toFixed(2)} A${R} ${R} 0 0 1 ${ex.toFixed(2)} ${ey.toFixed(2)}`;
+  }
+  function percToDeg(p){ return 180-p*1.8; }
+  
+  function drawArc(p){
+    document.getElementById('arcTrack').setAttribute('d', `M${(CX-R).toFixed(2)} ${CY.toFixed(2)} A${R} ${R} 0 0 1 ${(CX+R).toFixed(2)} ${CY.toFixed(2)}`);
+    document.getElementById('arcFill').setAttribute('d', p<=1?'':arcD(180,percToDeg(p)));
+    document.getElementById('arcTick').setAttribute('d', arcD(percToDeg(80.5),percToDeg(79.5)));
+  }
+
+  function onPerc(v){
+    v=+v;
+    document.getElementById('percDisp').textContent=v;
+    document.getElementById('gaugeNum').textContent=v+'%';
+    document.getElementById('percSlider').style.setProperty('--fp',((v-1)/78*100).toFixed(1)+'%');
+    drawArc(v);
+  }
+
+  function onKw(v){
+    v=+v;
+    document.getElementById('kwDisp').textContent=Number.isInteger(v)?v:v.toFixed(1);
+    document.getElementById('kwSlider').style.setProperty('--fk',((v-1)/21*100).toFixed(1)+'%');
+  }
+
+  function toggleKw(){
+    document.getElementById('kwField').classList.toggle('on', document.getElementById('kwToggle').checked);
+  }
+
+  function impostaCapacita(){
+    const isAltro = document.getElementById('modelloAuto').value === 'altro';
+    document.getElementById('capRow').classList.toggle('on', isAltro);
+    document.getElementById('carSpring').style.display  = isAltro ? 'none' : 'block';
+    document.getElementById('carGeneric').style.display = isAltro ? 'block' : 'none';
+    document.documentElement.classList.toggle('grey', isAltro);
+  }
+
+  function calcola(){
+    const perc = +document.getElementById('percSlider').value;
+    const kw = document.getElementById('kwToggle').checked ? +document.getElementById('kwSlider').value : KW_DEF;
+    const isAltro = document.getElementById('modelloAuto').value === 'altro';
+    const cap = isAltro ? (+document.getElementById('capacita').value||0) : CAP_DEF;
+
+    if(!cap||kw<=0||perc>=80){ alert('Controlla i dati.'); return; }
+
+    const kwh = (80-perc)/100*cap;
+    const kwhPresa = kwh/0.85;
+    const min = (kwh/kw)*60*FATTORE;
+    
+    const h=Math.floor(min/60), m=Math.round(min%60);
+    const fine = new Date(); fine.setMinutes(fine.getMinutes()+min);
+
+    document.getElementById('resTempo').textContent = h>0 ? `${h}h ${m}m` : `${m}m`;
+    document.getElementById('resOrario').textContent = fine.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+    document.getElementById('resKwh').textContent = kwhPresa.toFixed(1)+' kWh';
+    document.getElementById('resCosto').textContent = '~ '+(kwhPresa*0.25).toFixed(2)+' €';
+    
+    document.getElementById('resNote').textContent = `Batteria: ${kwh.toFixed(1)} kWh | Perdite ricarica ~15%`;
+    document.getElementById('resNote').classList.add('on');
+    document.getElementById('risultato').classList.add('show');
+  }
+
+  /* MODIFICA: Inizializzazione sicura al caricamento della pagina */
+  window.addEventListener('load', () => {
+    onPerc(35);
+    onKw(3.7);
+  });
+</script>
+</body>
+</html>
