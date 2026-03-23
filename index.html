@@ -1,153 +1,514 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Ricarica 80% – Dacia Spring</title>
-
   <link rel="shortcut icon" href="icons/icon-192.png" type="image/png">
   <link rel="icon" href="icons/icon-192.png" sizes="192x192">
   <link rel="icon" href="icons/icon-512.png" sizes="512x512">
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
   <link rel="manifest" href="manifest.json">
-
-  <meta name="theme-color" content="#00aaff">
+  <meta name="theme-color" content="#12090a">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Ricarica 80%">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
 
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
     :root {
-      --primary:#00aaff;
-      --dark:#0f0f15;
-      --gray:#222;
-      --light-gray:#bbb;
-      --bg:linear-gradient(135deg,#0f0f15,#1a1a1f);
-      --spacing:24px;
+      --orange:   #ff5e1a;
+      --orange2:  #ff8c42;
+      --amber:    #ffb830;
+      --dark:     #ff3d00;
+      --bg0:      #12090a;
+      --bg1:      #1c0f0a;
+      --bg2:      #251510;
+      --surface:  rgba(255,255,255,0.04);
+      --border:   rgba(255,130,60,0.12);
+      --text:     #fff0e8;
+      --muted:    rgba(255,210,180,0.45);
+      --accent:   #ff5e1a;
+      --accent2:  #ffb830;
     }
-    * {box-sizing:border-box;margin:0;padding:0;}
-    body {font-family:'Roboto',sans-serif;background:var(--bg);color:white;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px;}
-    .container {background:var(--dark);padding:36px 28px;border-radius:28px;box-shadow:0 15px 40px rgba(0,0,0,0.7);max-width:480px;width:100%;display:flex;flex-direction:column;gap:var(--spacing);}
-    h1 {text-align:center;font-size:32px;color:var(--primary);font-weight:700;margin-bottom:8px;}
-    .subtitle {text-align:center;color:var(--light-gray);font-size:15px;line-height:1.5;padding:0 20px;}
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    label {font-weight:500;font-size:15px;margin-bottom:8px;display:block;}
-    input, select {
-      width:100%;
-      padding:16px 18px;
-      border-radius:14px;
-      border:none;
-      background:var(--gray);
-      color:white;
-      font-size:16px;
-      margin-bottom:var(--spacing);
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg0);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex; justify-content: center; align-items: flex-start;
+      padding: 24px 16px 60px;
+      overflow-x: hidden;
     }
-    select {appearance:none;background-image:url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");background-repeat:no-repeat;background-position:right 16px center;background-size:12px;}
 
-    button {
-      margin-top:10px;
-      padding:18px;
-      background:var(--primary);
-      color:white;
-      border:none;
-      border-radius:16px;
-      font-size:19px;
-      font-weight:700;
-      cursor:pointer;
-      transition:0.3s;
-      box-shadow:0 6px 20px rgba(0,170,255,0.3);
+    /* grid pattern */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background:
+        linear-gradient(rgba(255,94,26,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,94,26,0.03) 1px, transparent 1px);
+      background-size: 44px 44px;
+      pointer-events: none; z-index: 0;
     }
-    button:hover {background:#0088cc;transform:translateY(-2px);}
+    /* warm glow top */
+    body::after {
+      content: '';
+      position: fixed;
+      top: -200px; left: 50%; transform: translateX(-50%);
+      width: 700px; height: 500px;
+      background: radial-gradient(ellipse, rgba(255,80,20,0.09) 0%, transparent 65%);
+      pointer-events: none; z-index: 0;
+    }
 
+    .app {
+      position: relative; z-index: 1;
+      width: 100%; max-width: 430px;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+
+    .app > * { opacity: 0; animation: up 0.55s ease forwards; }
+    .app > *:nth-child(1) { animation-delay: 0.00s; }
+    .app > *:nth-child(2) { animation-delay: 0.07s; }
+    .app > *:nth-child(3) { animation-delay: 0.13s; }
+    .app > *:nth-child(4) { animation-delay: 0.19s; }
+    .app > *:nth-child(5) { animation-delay: 0.25s; }
+    .app > *:nth-child(6) { animation-delay: 0.31s; }
+    @keyframes up {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── HEADER ── */
+    .header { text-align: center; padding: 4px 0 2px; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: rgba(255,94,26,0.12);
+      border: 1px solid rgba(255,94,26,0.28);
+      border-radius: 100px;
+      padding: 5px 14px;
+      font-size: 10.5px; font-weight: 600;
+      letter-spacing: 0.09em; text-transform: uppercase;
+      color: var(--orange2); margin-bottom: 12px;
+    }
+    h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: 36px; font-weight: 800; line-height: 1.08;
+      background: linear-gradient(140deg, #fff5f0 20%, var(--orange) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 7px;
+    }
+    .subtitle { color: var(--muted); font-size: 13.5px; line-height: 1.65; }
+
+    /* ── CAR SHOWCASE ── */
+    .car-card {
+      background: var(--bg1);
+      border: 1px solid var(--border);
+      border-radius: 26px;
+      padding: 0;
+      overflow: hidden;
+      position: relative;
+      min-height: 190px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    /* top glow line */
+    .car-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--orange), transparent);
+      opacity: 0.55; z-index: 2;
+    }
+    /* floor reflection */
+    .car-floor {
+      position: absolute;
+      bottom: 0; left: 0; right: 0; height: 50px;
+      background: linear-gradient(to top, rgba(255,94,26,0.06), transparent);
+      z-index: 1;
+    }
+    /* ambient circle behind car */
+    .car-glow {
+      position: absolute;
+      bottom: -30px; left: 50%; transform: translateX(-50%);
+      width: 280px; height: 80px;
+      background: radial-gradient(ellipse, rgba(255,94,26,0.18) 0%, transparent 70%);
+      z-index: 1;
+    }
+
+    .car-scene {
+      position: relative; z-index: 3;
+      width: 100%; display: flex; align-items: flex-end; justify-content: center;
+      padding: 20px 10px 18px;
+    }
+
+    /* ── SVG CAR ANIMATIONS ── */
+    #carSpring {
+      filter: drop-shadow(0 10px 24px rgba(255,60,0,0.35)) drop-shadow(0 2px 6px rgba(0,0,0,0.5));
+      animation: carFloat 3.5s ease-in-out infinite;
+      transform-origin: center bottom;
+    }
+    #carGeneric {
+      filter: drop-shadow(0 8px 18px rgba(255,140,60,0.2)) drop-shadow(0 2px 6px rgba(0,0,0,0.5));
+      animation: carFloat 3.5s ease-in-out infinite;
+      transform-origin: center bottom;
+      display: none;
+    }
+    @keyframes carFloat {
+      0%,100% { transform: translateY(0px); }
+      50%      { transform: translateY(-5px); }
+    }
+
+    /* spark particles */
+    .sparks {
+      position: absolute; inset: 0; pointer-events: none; z-index: 4;
+      overflow: hidden;
+    }
+    .spark {
+      position: absolute;
+      width: 3px; height: 3px; border-radius: 50%;
+      background: var(--orange2);
+      animation: spark var(--d,2s) var(--delay,0s) ease-in-out infinite;
+      opacity: 0;
+      left: var(--x, 50%); bottom: var(--y, 30%);
+    }
+    @keyframes spark {
+      0%   { opacity: 0; transform: translateY(0) scale(1); }
+      20%  { opacity: 0.9; }
+      100% { opacity: 0; transform: translateY(-40px) scale(0.3); }
+    }
+
+    /* label inside car card */
+    .car-label {
+      position: absolute; bottom: 10px; left: 16px;
+      font-size: 10.5px; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: rgba(255,210,180,0.35); z-index: 5;
+    }
+    .car-model-name {
+      position: absolute; top: 14px; right: 16px;
+      font-family: 'Syne', sans-serif;
+      font-size: 13px; font-weight: 800;
+      color: rgba(255,255,255,0.18); z-index: 5;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── GAUGE ── */
+    .gauge-card {
+      background: var(--bg1);
+      border: 1px solid var(--border);
+      border-radius: 26px;
+      padding: 26px 20px 20px;
+      display: flex; flex-direction: column; align-items: center;
+      position: relative; overflow: hidden;
+    }
+    .gauge-card::after {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--orange), transparent);
+      opacity: 0.5;
+    }
+    .arc-svg { width: 230px; height: 126px; overflow: visible; }
+    .arc-track { fill: none; stroke: rgba(255,255,255,0.05); stroke-width: 14; stroke-linecap: round; }
+    .arc-fill  { fill: none; stroke: url(#og); stroke-width: 14; stroke-linecap: round; }
+    .arc-tick  { fill: none; stroke: var(--amber); stroke-width: 4; stroke-linecap: round; }
+    .gauge-center { margin-top: -8px; text-align: center; }
+    .gauge-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 54px; font-weight: 800; line-height: 1;
+      color: var(--orange);
+      text-shadow: 0 0 28px rgba(255,94,26,0.4);
+      transition: color 0.3s;
+    }
+    .gauge-label-sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
+    .gauge-target-note {
+      margin-top: 8px;
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,184,48,0.1);
+      border: 1px solid rgba(255,184,48,0.22);
+      border-radius: 100px;
+      padding: 4px 12px;
+      font-size: 11px; font-weight: 600; color: var(--amber);
+    }
+
+    /* ── FORM ── */
+    .form-card {
+      background: var(--bg1);
+      border: 1px solid var(--border);
+      border-radius: 26px;
+      padding: 22px 20px 20px;
+    }
+    .section-label {
+      font-size: 10.5px; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 16px;
+    }
+    .sel-wrap { position: relative; margin-bottom: 18px; }
+    .sel-wrap select {
+      width: 100%; appearance: none;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif; font-size: 14.5px;
+      padding: 13px 42px 13px 16px;
+      cursor: pointer; outline: none;
+      transition: border-color 0.2s;
+    }
+    .sel-wrap select:focus { border-color: rgba(255,94,26,0.5); }
+    .sel-wrap::after {
+      content: '▾'; position: absolute; right: 15px; top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted); pointer-events: none; font-size: 12px;
+    }
+    .cap-row { display: none; align-items: center; gap: 10px; margin-bottom: 18px; }
+    .cap-row.on { display: flex; }
+    .cap-row input {
+      flex: 1;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 14px; color: var(--text);
+      font-family: 'DM Sans', sans-serif; font-size: 15px;
+      padding: 13px 16px; outline: none; transition: border-color 0.2s;
+    }
+    .cap-row input:focus { border-color: rgba(255,94,26,0.5); }
+    .cap-row span { font-size: 13px; color: var(--muted); }
+
+    .field { margin-bottom: 22px; }
+    .field:last-child { margin-bottom: 0; }
+    .field-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+    .field-lbl { font-size: 13px; font-weight: 500; color: var(--muted); }
+    .field-val { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; color: var(--text); }
+    .field-val span { font-size: 14px; font-weight: 400; color: var(--muted); margin-left: 2px; }
+
+    input[type="range"] {
+      -webkit-appearance: none; appearance: none;
+      width: 100%; height: 6px; border-radius: 100px; outline: none; cursor: pointer;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 24px; height: 24px; border-radius: 50%;
+      background: var(--orange);
+      box-shadow: 0 0 14px rgba(255,94,26,0.6);
+      cursor: pointer; transition: transform 0.12s;
+    }
+    input[type="range"]:active::-webkit-slider-thumb { transform: scale(1.22); }
+    input[type="range"]::-moz-range-thumb {
+      width: 24px; height: 24px; border-radius: 50%;
+      background: var(--orange); border: none; cursor: pointer;
+    }
+    #percSlider {
+      background: linear-gradient(to right,
+        var(--orange2) var(--fp, 43%), rgba(255,255,255,0.07) var(--fp, 43%));
+    }
+    #kwSlider {
+      background: linear-gradient(to right,
+        var(--orange) var(--fk, 13%), rgba(255,255,255,0.07) var(--fk, 13%));
+    }
+
+    /* ── CTA ── */
+    .cta {
+      width: 100%; padding: 19px;
+      background: linear-gradient(130deg, #ff5e1a 0%, #ff9a3c 100%);
+      color: #fff;
+      font-family: 'Syne', sans-serif;
+      font-size: 17px; font-weight: 800; letter-spacing: 0.02em;
+      border: none; border-radius: 20px; cursor: pointer;
+      box-shadow: 0 4px 28px rgba(255,80,20,0.35);
+      transition: transform 0.16s, box-shadow 0.16s, filter 0.16s;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    .cta:hover  { transform: translateY(-2px); box-shadow: 0 8px 36px rgba(255,80,20,0.45); }
+    .cta:active { transform: scale(0.97); filter: brightness(0.9); }
+
+    /* ── RESULT ── */
     .result {
-      background:rgba(0,170,255,0.15);
-      border-radius:20px;
-      padding:28px 20px;
-      text-align:center;
-      display:none;
-      flex-direction:column;
-      gap:16px;
-      margin-top:10px;
-      border:1px solid rgba(0,170,255,0.2);
+      background: var(--bg1);
+      border: 1px solid rgba(255,94,26,0.2);
+      border-radius: 26px;
+      padding: 0 20px;
+      display: none; flex-direction: column;
+      position: relative; overflow: hidden;
     }
-    .result.show {display:flex;}
-    .time {font-size:38px;font-weight:700;color:var(--primary);letter-spacing:-1px;}
+    .result.show {
+      display: flex;
+      animation: pop 0.45s cubic-bezier(.34,1.56,.64,1) both;
+    }
+    @keyframes pop {
+      from { opacity: 0; transform: scale(0.94) translateY(12px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .result::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% -20%, rgba(255,94,26,0.07), transparent 65%);
+      pointer-events: none;
+    }
+    .res-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 17px 0; border-bottom: 1px solid var(--border);
+    }
+    .res-row:last-child { border-bottom: none; }
+    .res-lbl {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 11.5px; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+    }
+    .dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--orange);
+      animation: blink 1.5s ease-in-out infinite;
+    }
+    @keyframes blink {
+      0%,100% { box-shadow: 0 0 0 0 rgba(255,94,26,0.8); }
+      50%      { box-shadow: 0 0 0 5px rgba(255,94,26,0); }
+    }
+    .res-val {
+      font-family: 'Syne', sans-serif;
+      font-size: 30px; font-weight: 800; color: var(--orange);
+      text-shadow: 0 0 20px rgba(255,94,26,0.3);
+    }
+    .res-val.neutral { color: var(--text); text-shadow: none; }
+    .res-val.small { font-size: 22px; color: var(--muted); }
+    .res-note {
+      font-size: 11px; color: var(--muted);
+      text-align: center; padding: 10px 4px 18px;
+      line-height: 1.6; display: none;
+    }
+    .res-note.on { display: block; }
+
+    /* ── FOOTER ── */
+    .foot {
+      text-align: center; font-size: 10.5px;
+      color: rgba(255,200,160,0.18); padding-top: 2px;
+    }
+
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
+    input[type=number] { -moz-appearance: textfield; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Ricarica 80%</h1>
-    <div class="subtitle">Calcolatore preciso per Dacia Spring<br>Fermati all'80% e proteggi la batteria</div>
+<div class="app">
 
-    <div>
-      <label>Modello auto</label>
-      <select id="modelloAuto" onchange="impostaCapacita()">
-        <option value="altro">Altro (inserisci manualmente)</option>
-        <option value="spring" selected>Dacia Spring Electric (26,8 kWh)</option>
-      </select>
+  <!-- HEADER -->
+  <header class="header">
+    <div class="badge">⚡ EV Charger</div>
+    <h1>Ricarica<br>all'80%</h1>
+    <p class="subtitle">Proteggi la batteria. Calcola l'orario esatto<br>in cui staccare la spina.</p>
+  </header>
 
-      <label>Capacità batteria (kWh)</label>
-      <input type="number" step="0.1" id="capacita" value="26.8" readonly/>
+  <!-- CAR SHOWCASE -->
+  <div class="car-card">
+    <div class="car-glow"></div>
+    <div class="car-floor"></div>
 
-      <label>Batteria attuale (%)</label>
-      <input type="number" id="percAttuale" min="1" max="99" value="35"/>
+    <!-- spark particles -->
+    <div class="sparks" id="sparks"></div>
 
-      <label>Potenza di ricarica reale (kW)</label>
-      <input type="number" step="0.1" id="potenza" value="3.7"/>
+    <div class="car-scene">
 
-      <button onclick="calcolaManuale()">Calcola tempo per 80%</button>
-    </div>
+      <!-- DACIA SPRING SVG (3D perspective, fedele alla foto) -->
+      <svg id="carSpring" xmlns="http://www.w3.org/2000/svg"
+           viewBox="0 0 520 220" width="360" height="152">
+        <defs>
+          <linearGradient id="bodyTop" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%"   stop-color="#ff7a3a"/>
+            <stop offset="60%"  stop-color="#ff5010"/>
+            <stop offset="100%" stop-color="#cc3800"/>
+          </linearGradient>
+          <linearGradient id="bodyShade" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%"   stop-color="#b83000" stop-opacity="0.6"/>
+            <stop offset="100%" stop-color="transparent"/>
+          </linearGradient>
+          <linearGradient id="roofGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%"   stop-color="#ff8f50"/>
+            <stop offset="100%" stop-color="#e84800"/>
+          </linearGradient>
+          <linearGradient id="windGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%"   stop-color="#c8e8ff" stop-opacity="0.55"/>
+            <stop offset="100%" stop-color="#90c8f0" stop-opacity="0.25"/>
+          </linearGradient>
+          <linearGradient id="sideWinGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%"   stop-color="#b8d8f8" stop-opacity="0.5"/>
+            <stop offset="100%" stop-color="#80b0d8" stop-opacity="0.2"/>
+          </linearGradient>
+          <linearGradient id="wheelGrad" cx="50%" cy="50%" r="50%" fx="35%" fy="35%" gradientUnits="objectBoundingBox" id="wg">
+            <stop offset="0%"   stop-color="#444"/>
+            <stop offset="100%" stop-color="#111"/>
+          </linearGradient>
+          <radialGradient id="rimGrad" cx="50%" cy="50%" r="50%" fx="40%" fy="40%">
+            <stop offset="0%"   stop-color="#888"/>
+            <stop offset="100%" stop-color="#333"/>
+          </radialGradient>
+          <filter id="softShadow" x="-5%" y="-5%" width="110%" height="130%">
+            <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#000" flood-opacity="0.4"/>
+          </filter>
+        </defs>
 
-    <div id="risultato" class="result">
-      <div>Mancano <span id="tempoRimanente" class="time">--</span></div>
-      <div>Arrivo all'80% alle <span id="orarioFinale" class="time">--</span></div>
-    </div>
-  </div>
+        <!-- SHADOW on ground -->
+        <ellipse cx="258" cy="210" rx="195" ry="12" fill="rgba(0,0,0,0.35)"/>
 
-  <script>
-    // Fattore fisso calibrato su test reali a ~5°C con ricarica lenta
-    const FATTORE_TEMP = 2.00;
+        <!-- ── BODY MAIN ── -->
+        <!-- Lower body side panel -->
+        <path d="M 68 155 L 90 118 L 400 118 L 425 155 Z"
+              fill="url(#bodyTop)" filter="url(#softShadow)"/>
+        <!-- Upper body / roof area -->
+        <path d="M 140 118 L 165 72 L 195 58 L 330 58 L 365 72 L 400 118 Z"
+              fill="url(#roofGrad)"/>
+        <!-- Hood (front slope) -->
+        <path d="M 68 155 L 90 118 L 145 118 L 140 145 Z"
+              fill="#e84800"/>
+        <!-- Trunk (rear) -->
+        <path d="M 400 118 L 425 155 L 412 155 L 395 130 Z"
+              fill="#cc3800"/>
+        <!-- Side shading -->
+        <path d="M 68 155 L 90 118 L 400 118 L 425 155 Z"
+              fill="url(#bodyShade)" opacity="0.4"/>
 
-    function calcolaManuale() {
-      const perc = parseFloat(document.getElementById('percAttuale').value) || 0;
-      const cap  = parseFloat(document.getElementById('capacita').value)   || 0;
-      const kw   = parseFloat(document.getElementById('potenza').value)    || 0;
+        <!-- Bumper front -->
+        <path d="M 52 168 L 68 155 L 140 155 L 138 168 Z"
+              fill="#2a2a2a" rx="4"/>
+        <!-- Bumper rear -->
+        <path d="M 425 155 L 440 168 L 375 168 L 373 155 Z"
+              fill="#2a2a2a"/>
 
-      if (perc < 1 || perc >= 100 || !cap || !kw) {
-        alert("Controlla i dati inseriti");
-        return;
-      }
+        <!-- Skid plates / lower cladding -->
+        <rect x="68" y="155" width="357" height="13" rx="3" fill="#333"/>
 
-      const kWhDaCaricare = (80 - perc) / 100 * cap;
-      let minuti = (kWhDaCaricare / kw) * 60 * FATTORE_TEMP;
+        <!-- Front grille / DX logo area -->
+        <rect x="62" y="135" width="72" height="22" rx="5" fill="#1a1a1a" opacity="0.9"/>
+        <!-- DX logo (Dacia) simplified -->
+        <text x="98" y="151" font-family="sans-serif" font-size="14" font-weight="900"
+              fill="white" text-anchor="middle" opacity="0.85">✕</text>
+        <!-- Grille slats -->
+        <line x1="66" y1="141" x2="130" y2="141" stroke="#333" stroke-width="1.5"/>
+        <line x1="66" y1="146" x2="130" y2="146" stroke="#333" stroke-width="1.5"/>
+        <line x1="66" y1="151" x2="130" y2="151" stroke="#333" stroke-width="1.5"/>
 
-      const h = Math.floor(minuti / 60);
-      const m = Math.round(minuti % 60);
-      const testoTempo = h > 0 ? `${h}h ${m}min` : `${m} minuti`;
+        <!-- Headlights (LED strip style) -->
+        <rect x="60" y="125" width="70" height="8" rx="4" fill="#f0f8ff" opacity="0.9"/>
+        <rect x="61" y="126" width="68" height="6" rx="3" fill="white"/>
+        <!-- headlight glow -->
+        <rect x="58" y="123" width="74" height="12" rx="5" fill="white" opacity="0.15"/>
 
-      const ora = new Date();
-      ora.setMinutes(ora.getMinutes() + Math.round(minuti));
-      const orario = ora.toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'});
+        <!-- Rear lights -->
+        <rect x="398" y="125" width="30" height="8" rx="4" fill="#ff2200" opacity="0.85"/>
+        <rect x="399" y="126" width="28" height="6" rx="3" fill="#ff4422"/>
 
-      document.getElementById('tempoRimanente').textContent = testoTempo;
-      document.getElementById('orarioFinale').textContent   = orario;
-      document.getElementById('risultato').classList.add('show');
-    }
+        <!-- ── WINDOWS ── -->
+        <!-- Windscreen -->
+        <path d="M 142 117 L 168 74 L 194 62 L 230 62 L 230 117 Z"
+              fill="url(#windGrad)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+        <!-- Windscreen highlight -->
+        <path d="M 155 110 L 175 82 L 195 70 L 215 70 L 215 110 Z"
+              fill="white" opacity="0.07"/>
 
-    window.impostaCapacita = () => {
-      const sel   = document.getElementById('modelloAuto');
-      const input = document.getElementById('capacita');
-      if (sel.value === "spring") {
-        input.value = "26.8";
-        input.readOnly = true;
-      } else {
-        input.value = "";
-        input.readOnly = false;
-        input.focus();
-      }
-    };
-  </script>
-</body>
-</html>
+        <!-- Side windows -->
+        <path d="M 232 62 L 330 62 L 360 72 L 362 117 L 232 117 Z"
+              fill="url(#sideWinGrad)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+        <!-- window divider (B-pillar) -->
+        <line x1="290" y1="62" x2="290" y2="117" stroke="rgba(0,0,0,0.4)" stroke
